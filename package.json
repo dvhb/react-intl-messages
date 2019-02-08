@@ -16,5 +16,14 @@
     "lokalise.co"
   ],
   "author": "Anton Savoskin <asav@dvhb.ru>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "babel-plugin-react-intl": "^3.0.1",
+    "gar": "^1.0.4",
+    "glob": "^7.1.3",
+    "request": "^2.88.0"
+  }
 }
