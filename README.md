@@ -2,16 +2,20 @@
 Library for parsing source files and extract react-intl messages. Extracted messages saves to json files. Underhood it uses babe-plugin-react-intl
 
 ## Features
-* syncronize translations with translation service (lokalise.co for now)
+* synchronize translations with translation service ([lokalise.co](https://lokalise.co/) for now)
 * custom babel config, appropriate for projects on react-native and typescript
 * prettify extracted json files
 
 ## Options
-langs - comma separeted languages,
-pattern - regex mask for files
-babelrc - path to babel rc custom config
+* `--langs` — comma separated languages
+* `--pattern` — regex mask for files
+* `--dest` — directory for extracted messages
+* `--babelrc` — path to babel rc custom config
 
-`react-intl-extract --langs=en,fr,de,ru --pattern=src/**/*.{ts,tsx} --dest=src/messages --babelrc=.babelrcts`
+Example:
+```sh
+react-intl-extract --langs=en,fr,de,ru --pattern=src/**/*.{ts,tsx} --dest=src/messages --babelrc=.babelrcts
+```
 
 ### Extracted json structure:
 `_default.json`
