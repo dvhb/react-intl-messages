@@ -1,0 +1,20 @@
+{
+  "name": "react-intl-extract",
+  "version": "0.0.1",
+  "description": "Library for parsing source files and extract react-intl messages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.dvhb.io:dvhb_libs/react-intl-extract.git"
+  },
+  "keywords": [
+    "react",
+    "react-intl",
+    "lokalise.co"
+  ],
+  "author": "Anton Savoskin <asav@dvhb.ru>",
+  "license": "MIT"
+}
