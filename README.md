@@ -1,46 +1,75 @@
-# react-intl-extract
+react-intl-extract
+==================
+
 Library for parsing source files and extract react-intl messages. Extracted messages saves to json files. Underhood it uses babe-plugin-react-intl
 
-## Features
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/react-intl-extract.svg)](https://npmjs.org/package/react-intl-extract)
+[![Downloads/week](https://img.shields.io/npm/dw/react-intl-extract.svg)](https://npmjs.org/package/react-intl-extract)
+[![License](https://img.shields.io/npm/l/react-intl-extract.svg)](https://github.com/sairus2k/react-intl-extract/blob/master/package.json)
+
+<!-- toc -->
+* [Features](#features)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+# Features
 * synchronize translations with translation service ([lokalise.co](https://lokalise.co/) for now)
 * custom babel config, appropriate for projects on react-native and typescript
 * prettify extracted json files
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g react-intl-extract
+$ messages COMMAND
+running command...
+$ messages (-v|--version|version)
+react-intl-extract/0.0.0 darwin-x64 node-v8.12.0
+$ messages --help [COMMAND]
+USAGE
+  $ messages COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+* [`messages extract`](#messages-extract)
+* [`messages help [COMMAND]`](#messages-help-command)
 
-## Options
-* `--langs` — comma separated languages
-* `--pattern` — regex mask for files
-* `--dest` — directory for extracted messages
-* `--babelrc` — path to babel rc custom config
+## `messages extract`
 
-Example:
-```sh
-react-intl-extract --langs=en,fr,de,ru --pattern=src/**/*.{ts,tsx} --dest=src/messages --babelrc=.babelrcts
+describe the command here
+
+```
+USAGE
+  $ messages extract
+
+OPTIONS
+  -d, --dest=dest        [default: ./messages] directory for extracted messages
+  -h, --help             show CLI help
+  -i, --ignore=ignore    regex mask for ignored files
+  -l, --langs=langs      (required) comma separated languages
+  -p, --pattern=pattern  (required) regex mask for files
+
+EXAMPLE
+  $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
+  hello world from ./src/hello.ts!
 ```
 
-### Extracted json structure:
-`_default.json`
-```json
-[
-  {
-    "id": "home.helloWorld",
-    "description": "Greeting the world",
-    "defaultMessage": "Hello world!",
-    "message": "",
-    "files": ["src/components/Home/index.js"]
-  }
-]
+## `messages help [COMMAND]`
+
+display help for messages
+
+```
+USAGE
+  $ messages help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
 ```
 
-### File after translation on lokalise.co:
-`fr.json`
-```json
-[
-  {
-    "id": "home.helloWorld",
-    "description": "Greeting the world",
-    "defaultMessage": "Hello world!",
-    "message": "Bonjour le monde",
-    "files": ["src/components/Home/index.js"]
-  }
-]
-```
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.6/src/commands/help.ts)_
+<!-- commandsstop -->
