@@ -12,7 +12,7 @@ type Message = {
 };
 type FileMessage = Message & { id: string };
 
-type LokaliseKey = {
+export type LokaliseKey = {
   key_id: number;
   created_at: string;
   key_name: {
@@ -60,7 +60,7 @@ type LokaliseKey = {
 };
 
 export default class Extract extends Command {
-  static description = 'describe the command here';
+  static description = 'Synchronise extracted files with Lokalise.co';
 
   static examples = [
     `$ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"

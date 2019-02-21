@@ -16,7 +16,7 @@ type FileToMessages = {
 };
 
 export default class Extract extends Command {
-  static description = 'describe the command here';
+  static description = 'Extract translations from source files to json';
 
   static examples = [
     `$ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"

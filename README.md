@@ -33,13 +33,29 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`messages clean`](#messages-clean)
 * [`messages extract`](#messages-extract)
 * [`messages help [COMMAND]`](#messages-help-command)
 * [`messages sync`](#messages-sync)
 
+## `messages clean`
+
+Clean lokalise for unused translation keys
+
+```
+USAGE
+  $ messages clean
+
+OPTIONS
+  -h, --help                 show CLI help
+  -i, --projectId=projectId  (required) Lokalise project id
+  -s, --source=source        (required) [default: src/messages] directory for extracted messages
+  -t, --token=token          (required) Lokalise token
+```
+
 ## `messages extract`
 
-describe the command here
+Extract translations from source files to json
 
 ```
 USAGE
@@ -75,7 +91,7 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.6
 
 ## `messages sync`
 
-describe the command here
+Synchronise extracted files with Lokalise.co
 
 ```
 USAGE
