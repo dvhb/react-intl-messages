@@ -1,7 +1,66 @@
 import { Command, flags } from '@oclif/command';
 import { transform, TransformOptions } from '@babel/core';
 import * as request from 'request-promise-native';
-import { readFile, writeFile, glob } from '../utils';
+
+import { glob, readFile, writeFile } from '../utils';
+
+type Message = {
+  defaultMessage: string;
+  message?: string;
+  description?: string;
+  files?: string[];
+};
+type FileMessage = Message & { id: string };
+type FileToMessages = {
+  [filename: string]: FileMessage[];
+};
+
+type LokaliseKey = {
+  key_id: number;
+  created_at: string;
+  key_name: {
+    ios: string;
+    android: string;
+    web: string;
+    other: string;
+  };
+  filenames: {
+    ios: string;
+    android: string;
+    web: string;
+    other: string;
+  };
+  description: string;
+  platforms: string[];
+  tags: string[];
+  comments: {
+    comment_id: number;
+    comment: string;
+    added_by: number;
+    added_by_email: string;
+    added_at: string;
+  }[];
+  screenshots: {
+    screenshot_id: number;
+    title: string;
+    description: string;
+    screenshot_tags: string[];
+    url: string;
+    created_at: string;
+  }[];
+  translations: {
+    translation_id: number;
+    key_id: number;
+    language_iso: string;
+    translation: string;
+    modified_by: number;
+    modified_by_email: string;
+    modified_at: string;
+    is_reviewed: boolean;
+    reviewed_by: number;
+    words: number;
+  }[];
+};
 
 export default class Extract extends Command {
   static description = 'describe the command here';
@@ -51,20 +110,19 @@ export default class Extract extends Command {
     }
     const locales = langs.split(',');
     const isLocal = !lokalise.projectId || !lokalise.token;
-    const fileToMessages: any = {};
-    let lokaliseKeys: any[] = [];
-    let messages: any = {};
-    const newMessages: any[] = [];
+    const fileToMessages: FileToMessages = {};
+    let lokaliseKeys: LokaliseKey[] = [];
+    let messages: { [id: string]: Message } = {};
+    const newMessages: string[] = [];
 
-    const posixPath = (fileName: { replace: (arg0: RegExp, arg1: string) => string }) => fileName.replace(/\\/g, '/');
+    const posixPath = (fileName: string) => fileName.replace(/\\/g, '/');
 
     const getMessage = (locale: string, id: string) => {
       if (locale === '_default') {
         return '';
       }
       const key = lokaliseKeys.find(key => key.key_name.web === id);
-      const lokaliseString =
-        key && key.translations.find((translation: { language_iso: string }) => translation.language_iso === locale);
+      const lokaliseString = key && key.translations.find(translation => translation.language_iso === locale);
       if (lokaliseString) {
         return lokaliseString.translation;
       }
@@ -121,14 +179,14 @@ export default class Extract extends Command {
       }
     }
 
-    async function writeMessages(fileName: string, msgs: any[]) {
+    async function writeMessages(fileName: string, msgs: Message[]) {
       await writeFile(fileName, `${JSON.stringify(msgs, null, 2)}\n`);
     }
 
     // merge messages to source files
-    async function mergeToFile(locale: string, toBuild: any) {
+    async function mergeToFile(locale: string, toBuild: boolean) {
       const fileName = `src/messages/${locale}.json`;
-      const originalMessages: any = {};
+      const originalMessages: { [id: string]: Message } = {};
       try {
         const oldFile = await readFile(fileName);
 
@@ -139,7 +197,7 @@ export default class Extract extends Command {
           throw new Error(`Error parsing messages JSON in file ${fileName}`);
         }
 
-        oldJson.forEach((message: { id: string | number }) => {
+        oldJson.forEach((message: FileMessage) => {
           originalMessages[message.id] = message;
           delete originalMessages[message.id].files;
         });
@@ -182,29 +240,27 @@ export default class Extract extends Command {
     function mergeMessages() {
       messages = {};
       Object.keys(fileToMessages).forEach(fileName => {
-        fileToMessages[fileName].forEach(
-          (newMsg: { id: string | number; defaultMessage: any; description: any; message: any }) => {
-            if (messages[newMsg.id]) {
-              if (messages[newMsg.id].defaultMessage !== newMsg.defaultMessage) {
-                throw new Error(`Different message default messages for message id "${newMsg.id}":
+        fileToMessages[fileName].forEach(newMsg => {
+          if (messages[newMsg.id]) {
+            if (messages[newMsg.id].defaultMessage !== newMsg.defaultMessage) {
+              throw new Error(`Different message default messages for message id "${newMsg.id}":
           ${messages[newMsg.id].defaultMessage} -- ${messages[newMsg.id].files}
           ${newMsg.defaultMessage} -- ${fileName}`);
-              }
-              if (messages[newMsg.id].description && newMsg.description) {
-                throw new Error(`Should be only one description for message id "${newMsg.id}":
+            }
+            if (messages[newMsg.id].description && newMsg.description) {
+              throw new Error(`Should be only one description for message id "${newMsg.id}":
           ${messages[newMsg.id].description} -- ${messages[newMsg.id].files}
           ${newMsg.description} -- ${fileName}`);
-              }
             }
-            const message = messages[newMsg.id] || {};
-            messages[newMsg.id] = {
-              description: newMsg.description || message.description,
-              defaultMessage: newMsg.defaultMessage || message.defaultMessage,
-              message: newMsg.message || message.message || '',
-              files: message.files ? [...message.files, fileName].sort() : [fileName],
-            };
-          },
-        );
+          }
+          const message = messages[newMsg.id] || {};
+          messages[newMsg.id] = {
+            description: newMsg.description || message.description,
+            defaultMessage: newMsg.defaultMessage || message.defaultMessage,
+            message: newMsg.message || message.message || '',
+            files: message.files ? [...message.files, fileName].sort() : [fileName],
+          };
+        });
       });
     }
 
@@ -223,15 +279,13 @@ export default class Extract extends Command {
      * Also extends known localizations
      */
     async function extractMessages() {
-      const compare = (a: number, b: number) => {
+      const compare = (a: string, b: string) => {
         if (a === b) {
           return 0;
         }
 
         return a < b ? -1 : 1;
       };
-
-      const compareMessages = (a: { id: any }, b: { id: any }) => compare(a.id, b.id);
 
       const processFile = async (fileName: string) => {
         try {
@@ -243,11 +297,13 @@ export default class Extract extends Command {
             plugins: ['react-intl'],
             filename: fileName,
           };
-          const result: any = transform(code, opts);
+          const result = transform(code, opts);
           if (result && result.metadata) {
+            // @ts-ignore
             const metadata = result.metadata['react-intl'];
             if (metadata.messages && metadata.messages.length) {
-              fileToMessages[posixName] = metadata.messages.sort(compareMessages);
+              const messages: FileMessage[] = metadata.messages;
+              fileToMessages[posixName] = messages.sort((a, b) => compare(a.id, b.id));
             } else {
               delete fileToMessages[posixName];
             }
