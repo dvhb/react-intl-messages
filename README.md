@@ -35,6 +35,7 @@ USAGE
 <!-- commands -->
 * [`messages extract`](#messages-extract)
 * [`messages help [COMMAND]`](#messages-help-command)
+* [`messages sync`](#messages-sync)
 
 ## `messages extract`
 
@@ -45,7 +46,7 @@ USAGE
   $ messages extract
 
 OPTIONS
-  -d, --dest=dest        [default: ./messages] directory for extracted messages
+  -d, --dest=dest        (required) [default: src/messages] directory for extracted messages
   -h, --help             show CLI help
   -i, --ignore=ignore    regex mask for ignored files
   -l, --langs=langs      (required) comma separated languages
@@ -53,7 +54,6 @@ OPTIONS
 
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
-  hello world from ./src/hello.ts!
 ```
 
 ## `messages help [COMMAND]`
@@ -72,4 +72,23 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.6/src/commands/help.ts)_
+
+## `messages sync`
+
+describe the command here
+
+```
+USAGE
+  $ messages sync
+
+OPTIONS
+  -h, --help                 show CLI help
+  -i, --projectId=projectId  (required) Lokalise project id
+  -l, --langs=langs          (required) comma separated languages
+  -s, --source=source        (required) [default: src/messages] directory for extracted messages
+  -t, --token=token          (required) Lokalise token
+
+EXAMPLE
+  $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
+```
 <!-- commandsstop -->
