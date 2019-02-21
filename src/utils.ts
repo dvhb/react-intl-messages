@@ -15,3 +15,5 @@ export const writeFile = (file: string, contents: string): Promise<void> =>
   new Promise((resolve, reject) => {
     fs.writeFile(file, contents, 'utf8', err => (err ? reject(err) : resolve()));
   });
+
+export const posixPath = (fileName: string) => fileName.replace(/\\/g, '/');
