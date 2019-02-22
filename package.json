@@ -9,8 +9,6 @@
   "bugs": "https://github.com/sairus2k/react-intl-extract/issues",
   "dependencies": {
     "@babel/core": "^7.2.2",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^7.1.0",
     "@oclif/command": "^1.5.10",
     "@oclif/config": "^1.12.6",
     "@oclif/plugin-help": "^2.1.6",

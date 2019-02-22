@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command';
-import { transform, TransformOptions } from '@babel/core';
+import { transform } from '@babel/core';
 import * as path from 'path';
 
 import { Base } from '../base';
@@ -122,18 +122,12 @@ export default class Extract extends Base {
     });
   }
 
-  processFile = async (fileName: string) => {
+  processFile = async (filename: string) => {
     const compare = (a: string, b: string) => (a === b ? 0 : a < b ? -1 : 1);
     try {
-      const code = await readFile(fileName);
-      const posixName = posixPath(fileName);
-      const opts: TransformOptions = {
-        babelrc: false,
-        presets: ['@babel/preset-typescript', '@babel/preset-react'],
-        plugins: ['react-intl'],
-        filename: fileName,
-      };
-      const result = transform(code, opts);
+      const code = await readFile(filename);
+      const posixName = posixPath(filename);
+      const result = transform(code, { filename, plugins: ['react-intl'] });
       if (result && result.metadata) {
         // @ts-ignore
         const metadata = result.metadata['react-intl'];
@@ -145,7 +139,7 @@ export default class Extract extends Base {
         }
       }
     } catch (err) {
-      console.error(`extractMessages: In ${fileName}:\n`, err.codeFrame || err);
+      console.error(`extractMessages: In ${filename}:\n`, err.codeFrame || err);
     }
   };
 
