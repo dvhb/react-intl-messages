@@ -17,6 +17,7 @@ Library for parsing source files and extract react-intl messages. Extracted mess
 * synchronize translations with translation service ([lokalise.co](https://lokalise.co/) for now)
 * custom babel config, appropriate for projects on react-native and typescript
 * prettify extracted json files
+* store parameters in config
 # Usage
 <!-- usage -->
 ```sh-session
@@ -108,3 +109,10 @@ EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
 <!-- commandsstop -->
+
+# Config
+* `messages` property in a package.json file.
+* `.messages` file with JSON or YAML syntax.
+* `.messages.json` file.
+* `.messages.yaml` or `.messages.yml` file.
+* `.messages.js` or `messages.config.js` JS file exporting the object.

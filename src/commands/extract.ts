@@ -30,11 +30,13 @@ export default class Extract extends Base {
     pattern: flags.string({
       char: 'p',
       description: 'Regex mask for files',
+      default: () => (Base.cosmiconfig ? Base.cosmiconfig.pattern : null),
       required: true,
     }),
     ignore: flags.string({
       char: 'i',
       description: 'Regex mask for ignored files',
+      default: () => (Base.cosmiconfig ? Base.cosmiconfig.ignore : null),
     }),
   };
 

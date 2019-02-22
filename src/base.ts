@@ -1,12 +1,15 @@
 import { Command, flags } from '@oclif/command';
+import * as cosmiconfig from 'cosmiconfig';
 
 export abstract class Base extends Command {
+  static cosmiconfig: cosmiconfig.Config | null;
+
   static flags = {
     help: flags.help({ char: 'h' }),
     messagesDir: flags.string({
       char: 'd',
       description: 'Directory for extracted messages',
-      default: 'src/messages',
+      default: () => (Base.cosmiconfig ? Base.cosmiconfig.messagesDir : 'src/messages'),
       required: true,
     }),
   };
@@ -15,6 +18,7 @@ export abstract class Base extends Command {
     langs: flags.string({
       char: 'l',
       description: 'Comma separated languages',
+      default: () => (Base.cosmiconfig ? Base.cosmiconfig.langs : null),
       required: true,
     }),
   };
@@ -33,4 +37,10 @@ export abstract class Base extends Command {
       required: true,
     }),
   };
+
+  async init() {
+    const explorer = cosmiconfig(this.config.bin);
+    const result = explorer.searchSync();
+    Base.cosmiconfig = result ? result.config : null;
+  }
 }
