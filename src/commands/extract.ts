@@ -1,7 +1,8 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { transform, TransformOptions } from '@babel/core';
 import * as path from 'path';
 
+import { Base } from '../base';
 import { glob, posixPath, readFile, writeFile } from '../utils';
 
 type Message = {
@@ -15,7 +16,7 @@ type FileToMessages = {
   [filename: string]: FileMessage[];
 };
 
-export default class Extract extends Command {
+export default class Extract extends Base {
   static description = 'Extract translations from source files to json';
 
   static examples = [
@@ -24,26 +25,16 @@ export default class Extract extends Command {
   ];
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    langs: flags.string({
-      char: 'l',
-      description: 'comma separated languages',
-      required: true,
-    }),
+    ...Base.flags,
+    ...Base.langFlags,
     pattern: flags.string({
       char: 'p',
-      description: 'regex mask for files',
+      description: 'Regex mask for files',
       required: true,
     }),
     ignore: flags.string({
       char: 'i',
-      description: 'regex mask for ignored files',
-    }),
-    dest: flags.string({
-      char: 'd',
-      description: 'directory for extracted messages',
-      default: 'src/messages',
-      required: true,
+      description: 'Regex mask for ignored files',
     }),
   };
 
@@ -60,9 +51,9 @@ export default class Extract extends Command {
    */
   async mergeToFile(locale: string) {
     const {
-      flags: { dest },
+      flags: { messagesDir },
     } = this.parse(Extract);
-    const fileName = path.join(dest, `${locale}.json`);
+    const fileName = path.join(messagesDir, `${locale}.json`);
     const originalMessages: { [id: string]: Message } = {};
     try {
       const oldFile = await readFile(fileName);

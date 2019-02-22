@@ -1,37 +1,20 @@
-import { Command, flags } from '@oclif/command';
+import * as path from 'path';
 import * as request from 'request-promise-native';
 
+import { Base } from '../base';
 import { readFile } from '../utils';
-import * as path from 'path';
 import { LokaliseKey } from './sync';
 
 const format = (time: Date) => time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
 const showError = (message: string) => console.error(`\x1b[31m${message}\x1b[0m`);
 const showInfo = (message: string) => console.info(`\x1b[34m[${format(new Date())}]\x1b[0m`, `${message}`);
 
-export default class Clean extends Command {
+export default class Clean extends Base {
   static description = 'Clean lokalise for unused translation keys';
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    source: flags.string({
-      char: 's',
-      description: 'directory for extracted messages',
-      default: 'src/messages',
-      required: true,
-    }),
-    projectId: flags.string({
-      char: 'i',
-      description: 'Lokalise project id',
-      env: 'LOKALISE_PROJECT_ID',
-      required: true,
-    }),
-    token: flags.string({
-      char: 't',
-      description: 'Lokalise token',
-      env: 'LOKALISE_TOKEN',
-      required: true,
-    }),
+    ...Base.flags,
+    ...Base.lokaliseFlags,
   };
 
   async getKeys() {
@@ -93,14 +76,14 @@ export default class Clean extends Command {
 
   async run() {
     const {
-      flags: { source },
+      flags: { messagesDir },
     } = this.parse(Clean);
     const start = new Date();
     const remoteKeys = await this.getKeys();
     if (!remoteKeys) return;
     showInfo(`Get ${remoteKeys.length} keys from Lokalise`);
 
-    const defaultFilePath = path.join(source, '_default.json');
+    const defaultFilePath = path.join(messagesDir, '_default.json');
     const defaultFile = await readFile(defaultFilePath);
     const localKeys = JSON.parse(defaultFile).map((key: { id: any }) => key.id);
     showInfo(`Found ${localKeys.length} keys keys in ${defaultFilePath}`);

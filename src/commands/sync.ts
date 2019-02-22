@@ -1,8 +1,9 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import * as request from 'request-promise-native';
+import * as path from 'path';
 
 import { readFile, writeFile } from '../utils';
-import * as path from 'path';
+import { Base } from '../base';
 
 type Message = {
   defaultMessage: string;
@@ -59,7 +60,7 @@ export type LokaliseKey = {
   }[];
 };
 
-export default class Extract extends Command {
+export default class Extract extends Base {
   static description = 'Synchronise extracted files with Lokalise.co';
 
   static examples = [
@@ -68,30 +69,9 @@ export default class Extract extends Command {
   ];
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    langs: flags.string({
-      char: 'l',
-      description: 'comma separated languages',
-      required: true,
-    }),
-    source: flags.string({
-      char: 's',
-      description: 'directory for extracted messages',
-      default: 'src/messages',
-      required: true,
-    }),
-    projectId: flags.string({
-      char: 'i',
-      description: 'Lokalise project id',
-      env: 'LOKALISE_PROJECT_ID',
-      required: true,
-    }),
-    token: flags.string({
-      char: 't',
-      description: 'Lokalise token',
-      env: 'LOKALISE_TOKEN',
-      required: true,
-    }),
+    ...Base.flags,
+    ...Base.langFlags,
+    ...Base.lokaliseFlags,
   };
   lokaliseKeys: LokaliseKey[] = [];
   messages: { [id: string]: Message } = {};
@@ -157,9 +137,9 @@ export default class Extract extends Command {
 
   async mergeToFile(locale: string) {
     const {
-      flags: { source },
+      flags: { messagesDir },
     } = this.parse(Extract);
-    const fileName = path.join(source, `${locale}.json`);
+    const fileName = path.join(messagesDir, `${locale}.json`);
     const originalMessages: { [id: string]: Message } = {};
     try {
       const oldFile = await readFile(fileName);
