@@ -1,17 +1,18 @@
-react-intl-extract
+react-intl-messages
 ==================
 
 Library for parsing source files and extract react-intl messages. Extracted messages saves to json files. Underhood it uses babe-plugin-react-intl
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/react-intl-extract.svg)](https://npmjs.org/package/react-intl-extract)
-[![Downloads/week](https://img.shields.io/npm/dw/react-intl-extract.svg)](https://npmjs.org/package/react-intl-extract)
-[![License](https://img.shields.io/npm/l/react-intl-extract.svg)](https://github.com/sairus2k/react-intl-extract/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/react-intl-messages.svg)](https://npmjs.org/package/react-intl-messages)
+[![Downloads/week](https://img.shields.io/npm/dw/react-intl-messages.svg)](https://npmjs.org/package/react-intl-messages)
+[![License](https://img.shields.io/npm/l/react-intl-messages.svg)](https://github.com/sairus2k/react-intl-messages/blob/master/package.json)
 
 <!-- toc -->
 * [Features](#features)
 * [Usage](#usage)
 * [Commands](#commands)
+* [Config](#config)
 <!-- tocstop -->
 # Features
 * synchronize translations with translation service ([lokalise.co](https://lokalise.co/) for now)
@@ -21,11 +22,11 @@ Library for parsing source files and extract react-intl messages. Extracted mess
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g react-intl-extract
+$ npm install -g react-intl-messages
 $ messages COMMAND
 running command...
 $ messages (-v|--version|version)
-react-intl-extract/0.0.0 darwin-x64 node-v8.12.0
+react-intl-messages/0.0.0 darwin-x64 node-v8.12.0
 $ messages --help [COMMAND]
 USAGE
   $ messages COMMAND
@@ -48,10 +49,10 @@ USAGE
   $ messages clean
 
 OPTIONS
-  -h, --help                 show CLI help
-  -i, --projectId=projectId  (required) Lokalise project id
-  -s, --source=source        (required) [default: src/messages] directory for extracted messages
-  -t, --token=token          (required) Lokalise token
+  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
+  -h, --help                     show CLI help
+  -i, --projectId=projectId      (required) Lokalise project id
+  -t, --token=token              (required) Lokalise token
 ```
 
 ## `messages extract`
@@ -63,11 +64,11 @@ USAGE
   $ messages extract
 
 OPTIONS
-  -d, --dest=dest        (required) [default: src/messages] directory for extracted messages
-  -h, --help             show CLI help
-  -i, --ignore=ignore    regex mask for ignored files
-  -l, --langs=langs      (required) comma separated languages
-  -p, --pattern=pattern  (required) regex mask for files
+  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
+  -h, --help                     show CLI help
+  -i, --ignore=ignore            Regex mask for ignored files
+  -l, --langs=langs              (required) Comma separated languages
+  -p, --pattern=pattern          (required) Regex mask for files
 
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
@@ -99,11 +100,11 @@ USAGE
   $ messages sync
 
 OPTIONS
-  -h, --help                 show CLI help
-  -i, --projectId=projectId  (required) Lokalise project id
-  -l, --langs=langs          (required) comma separated languages
-  -s, --source=source        (required) [default: src/messages] directory for extracted messages
-  -t, --token=token          (required) Lokalise token
+  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
+  -h, --help                     show CLI help
+  -i, --projectId=projectId      (required) Lokalise project id
+  -l, --langs=langs              (required) Comma separated languages
+  -t, --token=token              (required) Lokalise token
 
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"

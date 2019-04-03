@@ -1,12 +1,12 @@
 {
-  "name": "react-intl-extract",
+  "name": "react-intl-messages",
   "description": "Library for parsing source files and extract react-intl messages",
   "version": "0.0.0",
   "author": "Anton Savoskin @sairus2k",
   "bin": {
     "messages": "./bin/run"
   },
-  "bugs": "https://github.com/sairus2k/react-intl-extract/issues",
+  "bugs": "https://github.com/sairus2k/react-intl-messages/issues",
   "dependencies": {
     "@babel/core": "^7.2.2",
     "@oclif/command": "^1.5.10",
@@ -68,7 +68,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git.dvhb.io:dvhb_libs/react-intl-extract.git"
+    "url": "git@github.com:dvhb/react-intl-messages.git"
   },
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
