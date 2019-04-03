@@ -22,11 +22,11 @@ Library for parsing source files and extract react-intl messages. Extracted mess
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g react-intl-messages
+$ npm install -g @dvhb/react-intl-messages
 $ messages COMMAND
 running command...
 $ messages (-v|--version|version)
-react-intl-messages/0.0.0 darwin-x64 node-v8.12.0
+@dvhb/react-intl-messages/0.0.0 darwin-x64 node-v10.15.3
 $ messages --help [COMMAND]
 USAGE
   $ messages COMMAND
@@ -55,6 +55,8 @@ OPTIONS
   -t, --token=token              (required) Lokalise token
 ```
 
+_See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.0/src/commands/clean.ts)_
+
 ## `messages extract`
 
 Extract translations from source files to json
@@ -73,6 +75,8 @@ OPTIONS
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
+
+_See code: [src/commands/extract.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.0/src/commands/extract.ts)_
 
 ## `messages help [COMMAND]`
 
@@ -109,6 +113,8 @@ OPTIONS
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
+
+_See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.0/src/commands/sync.ts)_
 <!-- commandsstop -->
 
 # Config
