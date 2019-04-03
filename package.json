@@ -1,5 +1,5 @@
 {
-  "name": "react-intl-messages",
+  "name": "@dvhb/react-intl-messages",
   "description": "Library for parsing source files and extract react-intl messages",
   "version": "0.0.0",
   "author": "Anton Savoskin @sairus2k",
