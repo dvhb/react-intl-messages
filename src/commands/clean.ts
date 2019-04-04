@@ -1,12 +1,8 @@
 import * as path from 'path';
 
 import { Base } from '../base';
-import { readFile, request } from '../utils';
+import { readFile, request, showError, showInfo } from '../utils';
 import { LokaliseKey } from './sync';
-
-const format = (time: Date) => time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
-const showError = (message: string) => console.error(`\x1b[31m${message}\x1b[0m`);
-const showInfo = (message: string) => console.info(`\x1b[34m[${format(new Date())}]\x1b[0m`, `${message}`);
 
 export default class Clean extends Base {
   static description = 'Clean lokalise for unused translation keys';
@@ -31,7 +27,7 @@ export default class Clean extends Base {
       });
       return response.keys;
     } catch (e) {
-      console.error(e);
+      showError(e);
     }
   }
 
@@ -49,7 +45,7 @@ export default class Clean extends Base {
       });
       return response.keys_removed;
     } catch (e) {
-      console.error(e);
+      showError(e);
     }
   }
 
@@ -67,7 +63,7 @@ export default class Clean extends Base {
       });
       return response.snapshot.snapshot_id;
     } catch (e) {
-      console.error(e);
+      showError(e);
     }
   }
 
@@ -101,7 +97,7 @@ export default class Clean extends Base {
         if (removedKeys) {
           showInfo('Unused keys removed from lokalise');
         } else {
-          console.info(removedKeys);
+          showInfo(removedKeys);
         }
       } else {
         showError('Something wrong with snapshot');

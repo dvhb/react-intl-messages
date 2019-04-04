@@ -3,7 +3,7 @@ import { transform } from '@babel/core';
 import * as path from 'path';
 
 import { Base } from '../base';
-import { glob, posixPath, readFile, writeFile } from '../utils';
+import { glob, posixPath, readFile, showError, showInfo, writeFile } from '../utils';
 
 type Message = {
   defaultMessage: string;
@@ -93,7 +93,7 @@ export default class Extract extends Base {
 
     await Extract.writeMessages(fileName, result);
 
-    console.info(`Messages updated: ${fileName}`);
+    showInfo(`Messages updated: ${fileName}`);
   }
 
   mergeMessages() {
@@ -141,7 +141,7 @@ export default class Extract extends Base {
         }
       }
     } catch (err) {
-      console.error(`extractMessages: In ${filename}:\n`, err.codeFrame || err);
+      showError(`extractMessages: In ${filename}:\n${err.codeFrame || err}`);
     }
   };
 

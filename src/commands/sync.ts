@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { readFile, request, writeFile } from '../utils';
+import { readFile, request, showError, writeFile } from '../utils';
 import { Base } from '../base';
 
 type Message = {
@@ -89,7 +89,7 @@ export default class Extract extends Base {
       });
       this.lokaliseKeys = response.keys;
     } catch (e) {
-      console.error('Error while fetching strings from lokalise', e);
+      showError(`Error while fetching strings from lokalise\n${e}`);
     }
   }
 
@@ -116,7 +116,7 @@ export default class Extract extends Base {
       console.info(`Response from lokalise: ${response.statusCode}, ${response.statusMessage}`);
       console.info(`Errors: ${JSON.stringify(response.body.errors)}`);
     } catch (e) {
-      console.error('Error while uploading strings to lokalise', e);
+      showError(`Error while uploading strings to lokalise\n${e}`);
     }
   }
 
