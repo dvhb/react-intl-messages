@@ -1,7 +1,7 @@
 {
   "name": "@dvhb/react-intl-messages",
   "description": "Library for parsing source files and extract react-intl messages",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Anton Savoskin @sairus2k",
   "bin": {
     "messages": "./bin/run"
