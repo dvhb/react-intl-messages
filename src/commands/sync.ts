@@ -1,8 +1,6 @@
-import { flags } from '@oclif/command';
-import * as request from 'request-promise-native';
 import * as path from 'path';
 
-import { readFile, writeFile } from '../utils';
+import { readFile, request, writeFile } from '../utils';
 import { Base } from '../base';
 
 type Message = {
@@ -83,13 +81,13 @@ export default class Extract extends Base {
     } = this.parse(Extract);
     const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     try {
-      const response = await request({
+      const response = await request<any>({
         headers,
         url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'GET',
         qs: { include_translations: '1', limit: 5000 },
       });
-      this.lokaliseKeys = JSON.parse(response).keys;
+      this.lokaliseKeys = response.keys;
     } catch (e) {
       console.error('Error while fetching strings from lokalise', e);
     }
@@ -109,12 +107,11 @@ export default class Extract extends Base {
       })),
     };
     try {
-      const response = await request({
+      const response = await request<any>({
         headers,
         body,
         url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'POST',
-        json: true,
       });
       console.info(`Response from lokalise: ${response.statusCode}, ${response.statusMessage}`);
       console.info(`Errors: ${JSON.stringify(response.body.errors)}`);

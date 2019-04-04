@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import * as G from 'glob';
+import * as https from 'https';
+import * as querystring from 'querystring';
 
 export const glob = (pattern: string, ignore?: string | string[]): Promise<string[]> =>
   new Promise((resolve, reject) => {
@@ -17,3 +19,37 @@ export const writeFile = (file: string, contents: string): Promise<void> =>
   });
 
 export const posixPath = (fileName: string) => fileName.replace(/\\/g, '/');
+
+type Options = https.RequestOptions & {
+  url: string;
+  body?: object;
+  qs?: object;
+};
+export const request = <T>({ url, body, qs, headers = {}, ...rest }: Options) => {
+  const newUrl = qs ? `${url}?${querystring.stringify(qs)}` : url;
+
+  const bodyString = JSON.stringify(body);
+
+  if (body) {
+    headers['Content-Length'] = Buffer.byteLength(bodyString, 'utf8');
+  }
+
+  return new Promise<T>((resolve, reject) => {
+    const request = https.request(newUrl, { headers, ...rest }, response => {
+      let data = '';
+      response.on('data', chunk => {
+        data += chunk;
+      });
+      response.on('end', () => resolve(JSON.parse(data)));
+    });
+
+    if (body) {
+      request.write(bodyString);
+    }
+
+    request.on('error', err => {
+      reject(err);
+    });
+    request.end();
+  });
+};

@@ -1,8 +1,7 @@
 import * as path from 'path';
-import * as request from 'request-promise-native';
 
 import { Base } from '../base';
-import { readFile } from '../utils';
+import { readFile, request } from '../utils';
 import { LokaliseKey } from './sync';
 
 const format = (time: Date) => time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
@@ -24,13 +23,13 @@ export default class Clean extends Base {
     const headers = { 'x-api-token': token, 'content-type': 'application/json' };
 
     try {
-      const response = await request({
+      const response = await request<{ keys: LokaliseKey[] }>({
         headers,
         qs: { limit: 5000 },
         url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'GET',
       });
-      return JSON.parse(response).keys as LokaliseKey[];
+      return response.keys;
     } catch (e) {
       console.error(e);
     }
@@ -42,12 +41,11 @@ export default class Clean extends Base {
     } = this.parse(Clean);
     const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     try {
-      const response = await request({
+      const response = await request<any>({
         headers,
         url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'DELETE',
         body: { keys },
-        json: true,
       });
       return response.keys_removed;
     } catch (e) {
@@ -61,12 +59,11 @@ export default class Clean extends Base {
     } = this.parse(Clean);
     const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     try {
-      const response = await request({
+      const response = await request<any>({
         headers,
         url: `https://api.lokalise.co/api2/projects/${projectId}/snapshots`,
         method: 'POST',
         body: { title: 'API snapshot' },
-        json: true,
       });
       return response.snapshot.snapshot_id;
     } catch (e) {
