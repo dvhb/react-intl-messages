@@ -1,5 +1,8 @@
 import { Command, flags } from '@oclif/command';
 import * as cosmiconfig from 'cosmiconfig';
+import { config } from 'dotenv';
+
+config();
 
 export abstract class Base extends Command {
   static cosmiconfig: cosmiconfig.Config | null;
