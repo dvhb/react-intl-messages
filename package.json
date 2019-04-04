@@ -1,12 +1,48 @@
 {
   "name": "@dvhb/react-intl-messages",
-  "description": "Library for parsing source files and extract react-intl messages",
   "version": "0.0.0-development",
+  "description": "Library for parsing source files and extract react-intl messages",
+  "keywords": [
+    "lokalise.co",
+    "react",
+    "react-intl"
+  ],
+  "bugs": "https://github.com/sairus2k/react-intl-messages/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dvhb/react-intl-messages.git"
+  },
+  "license": "MIT",
   "author": "Anton Savoskin @sairus2k",
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "bin": {
     "messages": "./bin/run"
   },
-  "bugs": "https://github.com/sairus2k/react-intl-messages/issues",
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postpack": "rm -f oclif.manifest.json",
+    "semantic-release": "semantic-release",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "posttest": "tslint -p test -t stylish",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
   "dependencies": {
     "@babel/core": "^7.2.2",
     "@oclif/command": "^1.5.10",
@@ -44,47 +80,11 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "files": [
-    "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
-  ],
-  "keywords": [
-    "react",
-    "react-intl",
-    "lokalise.co"
-  ],
-  "license": "MIT",
-  "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "messages",
     "plugins": [
       "@oclif/plugin-help"
     ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 120
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dvhb/react-intl-messages.git"
-  },
-  "scripts": {
-    "postpack": "rm -f oclif.manifest.json",
-    "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md",
-    "semantic-release": "semantic-release"
-  },
-  "types": "lib/index.d.ts",
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   }
 }
