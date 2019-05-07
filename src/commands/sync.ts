@@ -129,7 +129,7 @@ export default class Extract extends Base {
     if (lokaliseString) {
       return lokaliseString.translation;
     }
-    if (locale.slice(0, 2) === 'en') {
+    if (locale === 'en') {
       this.newMessages.push(id);
     }
     return '';
