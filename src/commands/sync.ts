@@ -72,7 +72,7 @@ export default class Extract extends Base {
     ...Base.lokaliseFlags,
   };
   lokaliseKeys: LokaliseKey[] = [];
-  messages: { [id: string]: Message } = {};
+  messages: { [id: string]: Message | undefined } = {};
   newMessages: string[] = [];
 
   async getFromLokalise() {
@@ -99,12 +99,15 @@ export default class Extract extends Base {
     } = this.parse(Extract);
     const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     const body = {
-      keys: this.newMessages.map(id => ({
-        key_name: id,
-        description: this.messages[id].description,
-        platforms: ['ios', 'android', 'web', 'other'],
-        translations: [{ language_iso: 'en', translation: this.messages[id].defaultMessage }],
-      })),
+      keys: this.newMessages.map(id => {
+        const message = this.messages[id];
+        return {
+          key_name: id,
+          description: message ? message.description : '',
+          platforms: ['ios', 'android', 'web', 'other'],
+          translations: [{ language_iso: 'en', translation: message ? message.defaultMessage : '' }],
+        };
+      }),
     };
     try {
       const response = await request<any>({
