@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { URL } from 'url';
 import * as G from 'glob';
 import * as https from 'https';
 import * as querystring from 'querystring';
