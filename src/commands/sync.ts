@@ -72,7 +72,7 @@ export default class Extract extends Base {
     ...Base.lokaliseFlags,
   };
   lokaliseKeys: LokaliseKey[] = [];
-  messages: { [id: string]: Message | undefined } = {};
+  messages: { [id: string]: Message } = {};
   newMessages: string[] = [];
 
   async getFromLokalise() {
@@ -116,8 +116,7 @@ export default class Extract extends Base {
         url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'POST',
       });
-      console.info(`Response from lokalise: ${response.statusCode}, ${response.statusMessage}`);
-      console.info(`Errors: ${JSON.stringify(response.body.errors)}`);
+      console.info(`Response from lokalise: ${response}`);
     } catch (e) {
       showError(`Error while uploading strings to lokalise\n${e}`);
     }
@@ -140,7 +139,7 @@ export default class Extract extends Base {
       flags: { messagesDir },
     } = this.parse(Extract);
     const fileName = path.join(messagesDir, `${locale}.json`);
-    const originalMessages: { [id: string]: Message } = {};
+    const originalMessages: { [id: string]: Message } = this.messages;
     try {
       const oldFile = await readFile(fileName);
 
