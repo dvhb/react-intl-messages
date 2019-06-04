@@ -45,9 +45,12 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "setupFiles": [
+      "<rootDir>/test/setup.ts"
+    ],
     "testEnvironment": "node",
     "testMatch": [
-      "<rootDir>/test/**/*.ts"
+      "<rootDir>/test/**/*.test.ts"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
@@ -77,6 +80,7 @@
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.13",
     "@types/node": "^10.12.26",
+    "babel-preset-react-app": "^9.0.0",
     "chai": "^4.2.0",
     "globby": "^8.0.2",
     "husky": "^1.3.1",
