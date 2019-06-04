@@ -14,8 +14,8 @@ afterAll(() => {
 });
 
 describe('clean', () => {
-  const projectId = '139504615bd04772c3b220.60315670';
-  const token = 'df4722895ecb0cb829537c0e49e9bd5e02a076ac';
+  const projectId = process.env.LOKALISE_PROJECT_ID;
+  const token = process.env.LOKALISE_TOKEN;
 
   test
     .env({
