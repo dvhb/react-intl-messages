@@ -26,7 +26,9 @@ type Options = https.RequestOptions & {
   qs?: object;
 };
 export const request = <T>({ url, body, qs, headers = {}, ...rest }: Options) => {
-  const newUrl = qs ? `${url}?${querystring.stringify(qs)}` : url;
+  const { hostname, pathname } = new URL(url);
+  const searchParams = qs && querystring.stringify(qs);
+  const path = searchParams ? `${pathname}?${searchParams}` : pathname;
 
   const bodyString = JSON.stringify(body);
 
@@ -35,7 +37,7 @@ export const request = <T>({ url, body, qs, headers = {}, ...rest }: Options) =>
   }
 
   return new Promise<T>((resolve, reject) => {
-    const request = https.request(newUrl, { headers, ...rest }, response => {
+    const request = https.request({ headers, hostname, path, ...rest }, response => {
       let data = '';
       response.on('data', chunk => {
         data += chunk;
