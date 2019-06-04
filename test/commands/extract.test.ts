@@ -1,19 +1,21 @@
 import { test } from '@oclif/test';
 import { readJson, mkdir, rmdir } from '../utils';
 
+const messagesDir = 'messagesExtract';
+
 beforeAll(() => {
-  mkdir('messages');
+  mkdir(messagesDir);
 });
 
 afterAll(() => {
-  rmdir('messages');
+  rmdir(messagesDir);
 });
 
 describe('extract', () => {
   test
     .stdout()
-    .command(['extract'])
+    .command(['extract', '--messagesDir', messagesDir])
     .it('extract messages into en.json', () => {
-      expect(readJson('messages/en.json')).toMatchSnapshot();
+      expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot();
     });
 });

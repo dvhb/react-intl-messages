@@ -12,16 +12,3 @@ Array [
   },
 ]
 `;
-
-exports[`extract runs extract 1`] = `
-Array [
-  Object {
-    "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
-    "files": Array [
-      "src/App.js",
-    ],
-    "id": "welcome",
-    "message": "",
-  },
-]
-`;
