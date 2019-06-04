@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, rmdirSync, unlinkSync } from 'fs';
+import { mkdirSync, readdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 export const readJson = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
@@ -9,3 +9,4 @@ export const rmdir = (path: string) => {
   });
   rmdirSync(path);
 };
+export const copyFile = (source: string, target: string) => writeFileSync(target, readFileSync(source));
