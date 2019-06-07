@@ -2,7 +2,7 @@ import * as path from 'path';
 
 import { Base } from '../base';
 import { readFile, request, showError, showInfo } from '../utils';
-import { LokaliseKey } from '../providers/localize';
+import { LokaliseKey } from '../providers/lokalise';
 
 export default class Clean extends Base {
   static description = 'Clean lokalise for unused translation keys';
