@@ -33,7 +33,7 @@ describe('clean', () => {
         .reply(200, { keys_removed: [22743596] }),
     )
     .stderr()
-    .command(['clean', '--messagesDir', messagesDir])
+    .command(['clean', '--messagesDir', messagesDir, '--lokalise'])
     .it('runs hello', ctx => {
       expect(ctx.stderr).toBe('');
     });

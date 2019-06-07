@@ -1,62 +1,10 @@
 import * as path from 'path';
 
-import { readFile, request, showError, writeFile } from '../utils';
+import { readFile, showInfo, writeFile } from '../utils';
 import { Base } from '../base';
-
-type Message = {
-  defaultMessage: string;
-  message?: string;
-  description?: string;
-  files?: string[];
-};
-type FileMessage = Message & { id: string };
-
-export type LokaliseKey = {
-  key_id: number;
-  created_at: string;
-  key_name: {
-    ios: string;
-    android: string;
-    web: string;
-    other: string;
-  };
-  filenames: {
-    ios: string;
-    android: string;
-    web: string;
-    other: string;
-  };
-  description: string;
-  platforms: string[];
-  tags: string[];
-  comments: {
-    comment_id: number;
-    comment: string;
-    added_by: number;
-    added_by_email: string;
-    added_at: string;
-  }[];
-  screenshots: {
-    screenshot_id: number;
-    title: string;
-    description: string;
-    screenshot_tags: string[];
-    url: string;
-    created_at: string;
-  }[];
-  translations: {
-    translation_id: number;
-    key_id: number;
-    language_iso: string;
-    translation: string;
-    modified_by: number;
-    modified_by_email: string;
-    modified_at: string;
-    is_reviewed: boolean;
-    reviewed_by: number;
-    words: number;
-  }[];
-};
+import { Localize } from '../providers/localize';
+import { Provider } from '../providers/provider';
+import { Message } from '../types';
 
 export default class Extract extends Base {
   static description = 'Synchronise extracted files with Lokalise.co';
@@ -69,70 +17,10 @@ export default class Extract extends Base {
   static flags = {
     ...Base.flags,
     ...Base.langFlags,
-    ...Base.lokaliseFlags,
+    ...Base.providersFlags,
   };
-  lokaliseKeys: LokaliseKey[] = [];
+  provider?: Provider;
   messages: { [id: string]: Message } = {};
-  newMessages: string[] = [];
-
-  async getFromLokalise() {
-    const {
-      flags: { token, projectId },
-    } = this.parse(Extract);
-    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
-    try {
-      const response = await request<any>({
-        headers,
-        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
-        method: 'GET',
-        qs: { include_translations: '1', limit: 5000 },
-      });
-      this.lokaliseKeys = response.keys;
-    } catch (e) {
-      showError(`Error while fetching strings from lokalise\n${e}`);
-    }
-  }
-
-  async uploadToLokalise() {
-    const {
-      flags: { token, projectId },
-    } = this.parse(Extract);
-    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
-    const body = {
-      keys: this.newMessages.map(id => {
-        const message = this.messages[id];
-        return {
-          key_name: id,
-          description: message ? message.description : '',
-          platforms: ['ios', 'android', 'web', 'other'],
-          translations: [{ language_iso: 'en', translation: message ? message.defaultMessage : '' }],
-        };
-      }),
-    };
-    try {
-      const response = await request<any>({
-        headers,
-        body,
-        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
-        method: 'POST',
-      });
-      console.info(`Response from lokalise: ${response}`);
-    } catch (e) {
-      showError(`Error while uploading strings to lokalise\n${e}`);
-    }
-  }
-
-  getMessage(locale: string, id: string) {
-    const key = this.lokaliseKeys.find(key => key.key_name.web === id);
-    const lokaliseString = key && key.translations.find(translation => translation.language_iso === locale);
-    if (lokaliseString) {
-      return lokaliseString.translation;
-    }
-    if (locale === 'en') {
-      this.newMessages.push(id);
-    }
-    return '';
-  }
 
   async mergeToFile(locale: string) {
     const {
@@ -150,7 +38,7 @@ export default class Extract extends Base {
         throw new Error(`Error parsing messages JSON in file ${fileName}`);
       }
 
-      oldJson.forEach((message: FileMessage) => {
+      oldJson.forEach((message: Message) => {
         originalMessages[message.id] = message;
       });
     } catch (err) {
@@ -165,7 +53,9 @@ export default class Extract extends Base {
       const msg = originalMessages[id];
       msg.description = newMsg.description || msg.description;
       msg.defaultMessage = newMsg.defaultMessage || msg.defaultMessage;
-      msg.message = this.getMessage(locale, id);
+      if (this.provider) {
+        msg.message = this.provider.getMessage(locale, id);
+      }
       msg.files = newMsg.files;
     });
 
@@ -175,7 +65,7 @@ export default class Extract extends Base {
 
     await Extract.writeMessages(fileName, result);
 
-    console.info(`Messages updated: ${fileName}`);
+    showInfo(`Messages updated: ${fileName}`);
   }
 
   static async writeMessages(fileName: string, msgs: Message[]) {
@@ -184,16 +74,19 @@ export default class Extract extends Base {
 
   async run() {
     const {
-      flags: { langs },
+      flags: { langs, lokaliseToken, lokaliseProjectId },
     } = this.parse(Extract);
+
+    this.provider = new Localize(lokaliseProjectId, lokaliseToken);
 
     const locales = langs.split(',');
 
-    await this.getFromLokalise();
+    await this.provider.getKeys();
     await Promise.all(locales.map(locale => this.mergeToFile(locale)));
-    if (this.newMessages.length > 0) {
-      console.info(`New translation keys: ${this.newMessages.length}`);
-      await this.uploadToLokalise();
+    const newMessages = this.provider.getNewMessages();
+    if (newMessages.length > 0) {
+      showInfo(`New translation keys: ${newMessages.length}`);
+      await this.provider.uploadMessages(newMessages.map(id => this.messages[id]));
     }
   }
 }

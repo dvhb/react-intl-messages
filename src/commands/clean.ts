@@ -2,27 +2,27 @@ import * as path from 'path';
 
 import { Base } from '../base';
 import { readFile, request, showError, showInfo } from '../utils';
-import { LokaliseKey } from './sync';
+import { LokaliseKey } from '../providers/localize';
 
 export default class Clean extends Base {
   static description = 'Clean lokalise for unused translation keys';
 
   static flags = {
     ...Base.flags,
-    ...Base.lokaliseFlags,
+    ...Base.providersFlags,
   };
 
   async getKeys() {
     const {
-      flags: { token, projectId },
+      flags: { lokaliseToken, lokaliseProjectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
 
     try {
       const response = await request<{ keys: LokaliseKey[] }>({
         headers,
         qs: { limit: 5000 },
-        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
+        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/keys`,
         method: 'GET',
       });
       return response.keys;
@@ -33,13 +33,13 @@ export default class Clean extends Base {
 
   async removeKeys(keys: number[]) {
     const {
-      flags: { token, projectId },
+      flags: { lokaliseToken, lokaliseProjectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
     try {
       const response = await request<any>({
         headers,
-        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
+        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/keys`,
         method: 'DELETE',
         body: { keys },
       });
@@ -51,13 +51,13 @@ export default class Clean extends Base {
 
   async createSnapshot() {
     const {
-      flags: { token, projectId },
+      flags: { lokaliseToken, lokaliseProjectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
     try {
       const response = await request<any>({
         headers,
-        url: `https://api.lokalise.co/api2/projects/${projectId}/snapshots`,
+        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/snapshots`,
         method: 'POST',
         body: { title: 'API snapshot' },
       });

@@ -28,11 +28,14 @@ describe('sync', () => {
         .get(`/api2/projects/${projectId}/keys`)
         .query(true)
         .reply(200, { project_id: '139504615bd04772c3b220.60315670', keys: [] })
-        .post(`/api2/projects/${projectId}/keys`)
+        .post(`/api2/projects/${projectId}/keys`, (body: object) => {
+          expect(body).toMatchSnapshot();
+          return true;
+        })
         .reply(200, lokaliseKeysJson),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir])
+    .command(['sync', '--messagesDir', messagesDir, '--lokalise'])
     .it('runs hello', ctx => {
       expect(ctx.stderr).toBe('');
     });

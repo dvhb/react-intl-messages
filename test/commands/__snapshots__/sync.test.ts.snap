@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sync runs hello 1`] = `
+Object {
+  "keys": Array [
+    Object {
+      "key_name": "welcome",
+      "platforms": Array [
+        "ios",
+        "android",
+        "web",
+        "other",
+      ],
+      "translations": Array [
+        Object {
+          "language_iso": "en",
+          "translation": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+        },
+      ],
+    },
+  ],
+}
+`;

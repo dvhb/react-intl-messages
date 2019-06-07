@@ -26,17 +26,22 @@ export abstract class Base extends Command {
     }),
   };
 
-  static lokaliseFlags = {
-    projectId: flags.string({
-      char: 'i',
+  static providersFlags = {
+    lokalise: flags.boolean({
+      description: 'Translation service provider',
+      env: 'LOKALISE',
+      dependsOn: ['lokaliseProjectId', 'lokaliseToken'],
+    }),
+    lokaliseProjectId: flags.string({
       description: 'Lokalise project id',
       env: 'LOKALISE_PROJECT_ID',
+      dependsOn: ['lokalise'],
       required: true,
     }),
-    token: flags.string({
-      char: 't',
+    lokaliseToken: flags.string({
       description: 'Lokalise token',
       env: 'LOKALISE_TOKEN',
+      dependsOn: ['lokalise'],
       required: true,
     }),
   };
