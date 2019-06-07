@@ -14,7 +14,7 @@ afterAll(() => {
   rmdir(messagesDir);
 });
 
-describe('sync', () => {
+describe('sync lokalise', () => {
   const projectId = process.env.LOKALISE_PROJECT_ID;
   const token = process.env.LOKALISE_TOKEN;
 
@@ -36,7 +36,33 @@ describe('sync', () => {
     )
     .stderr()
     .command(['sync', '--messagesDir', messagesDir, '--lokalise'])
-    .it('runs hello', ctx => {
+    .it('runs sync', ctx => {
+      expect(ctx.stderr).toBe('');
+    });
+});
+
+describe('sync locize', () => {
+  const projectId = process.env.LOCIZE_PROJECT_ID;
+  const token = process.env.LOCIZE_TOKEN;
+
+  test
+    .env({
+      LOCIZE_PROJECT_ID: projectId,
+      LOCIZE_TOKEN: token,
+    })
+    .nock('https://api.locize.io', api =>
+      api
+        .get(`/${projectId}/latest/en/test`)
+        .reply(200, {})
+        .post(`/update/${projectId}/latest/en/test`, (body: object) => {
+          expect(body).toMatchSnapshot();
+          return true;
+        })
+        .reply(200, lokaliseKeysJson),
+    )
+    .stderr()
+    .command(['sync', '--messagesDir', messagesDir, '--locize'])
+    .it('runs sync', ctx => {
       expect(ctx.stderr).toBe('');
     });
 });

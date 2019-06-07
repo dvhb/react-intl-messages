@@ -56,7 +56,7 @@ type LocalizeResponse = {
 export class Lokalise implements Provider {
   lokaliseKeys: LokaliseKey[] = [];
   newMessages: string[] = [];
-  constructor(private projectId: string, private token: string) {}
+  constructor(private projectId?: string, private token?: string) {}
 
   async getKeys() {
     const headers = { 'x-api-token': this.token, 'content-type': 'application/json' };

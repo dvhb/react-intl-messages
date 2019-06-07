@@ -31,18 +31,30 @@ export abstract class Base extends Command {
       description: 'Translation service provider',
       env: 'LOKALISE',
       dependsOn: ['lokaliseProjectId', 'lokaliseToken'],
+      exclusive: ['locize'],
     }),
     lokaliseProjectId: flags.string({
       description: 'Lokalise project id',
       env: 'LOKALISE_PROJECT_ID',
-      dependsOn: ['lokalise'],
-      required: true,
     }),
     lokaliseToken: flags.string({
       description: 'Lokalise token',
       env: 'LOKALISE_TOKEN',
-      dependsOn: ['lokalise'],
-      required: true,
+    }),
+
+    locize: flags.boolean({
+      description: 'Translation service provider',
+      env: 'LOCIZE',
+      dependsOn: ['locizeProjectId', 'locizeApiKey'],
+      exclusive: ['lokalise'],
+    }),
+    locizeProjectId: flags.string({
+      description: 'Locize project id',
+      env: 'LOCIZE_PROJECT_ID',
+    }),
+    locizeApiKey: flags.string({
+      description: 'Locize api key',
+      env: 'LOCIZE_API_KEY',
     }),
   };
 

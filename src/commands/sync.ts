@@ -1,10 +1,11 @@
 import * as path from 'path';
 
-import { readFile, showInfo, writeFile } from '../utils';
+import { readFile, showError, showInfo, writeFile } from '../utils';
 import { Base } from '../base';
 import { Lokalise } from '../providers/lokalise';
 import { Provider } from '../providers/provider';
 import { Message } from '../types';
+import { Locize } from '../providers/locize';
 
 export default class Extract extends Base {
   static description = 'Synchronise extracted files with Lokalise.co';
@@ -74,10 +75,19 @@ export default class Extract extends Base {
 
   async run() {
     const {
-      flags: { langs, lokaliseToken, lokaliseProjectId },
+      flags: { langs, lokalise, locize, lokaliseToken, lokaliseProjectId, locizeApiKey, locizeProjectId },
     } = this.parse(Extract);
 
-    this.provider = new Lokalise(lokaliseProjectId, lokaliseToken);
+    const getProvider = () => {
+      if (lokalise) return new Lokalise(lokaliseProjectId, lokaliseToken);
+      if (locize) return new Locize(locizeProjectId, locizeApiKey);
+    };
+
+    this.provider = getProvider();
+    if (!this.provider) {
+      showError('Not provider selected');
+      return;
+    }
 
     const locales = langs.split(',');
 
