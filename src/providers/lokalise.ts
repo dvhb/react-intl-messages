@@ -53,7 +53,7 @@ type LocalizeResponse = {
   keys: LokaliseKey[];
 };
 
-export class Localize implements Provider {
+export class Lokalise implements Provider {
   lokaliseKeys: LokaliseKey[] = [];
   newMessages: string[] = [];
   constructor(private projectId: string, private token: string) {}

@@ -2,7 +2,7 @@ import * as path from 'path';
 
 import { readFile, showInfo, writeFile } from '../utils';
 import { Base } from '../base';
-import { Localize } from '../providers/localize';
+import { Lokalise } from '../providers/lokalise';
 import { Provider } from '../providers/provider';
 import { Message } from '../types';
 
@@ -77,7 +77,7 @@ export default class Extract extends Base {
       flags: { langs, lokaliseToken, lokaliseProjectId },
     } = this.parse(Extract);
 
-    this.provider = new Localize(lokaliseProjectId, lokaliseToken);
+    this.provider = new Lokalise(lokaliseProjectId, lokaliseToken);
 
     const locales = langs.split(',');
 
