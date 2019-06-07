@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sync locize runs sync 1`] = `
+Object {
+  "welcome": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+}
+`;
+
+exports[`sync lokalise runs sync 1`] = `
+Object {
+  "keys": Array [
+    Object {
+      "key_name": "welcome",
+      "platforms": Array [
+        "ios",
+        "android",
+        "web",
+        "other",
+      ],
+      "translations": Array [
+        Object {
+          "language_iso": "en",
+          "translation": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+        },
+      ],
+    },
+  ],
+}
+`;
