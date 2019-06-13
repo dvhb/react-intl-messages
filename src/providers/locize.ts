@@ -9,7 +9,12 @@ const BASE_URL = 'https://api.locize.io';
 export class Locize implements Provider {
   locizeKeys: { [locale: string]: LocizeKeys } = {};
   newMessages: string[] = [];
-  constructor(private projectId?: string, private apiKey?: string) {}
+  constructor(
+    private projectId?: string,
+    private apiKey?: string,
+    private version?: string,
+    private namespace?: string,
+  ) {}
 
   async getKeys(locales: string[]) {
     const headers = { 'content-type': 'application/json' };
@@ -17,7 +22,7 @@ export class Locize implements Provider {
       try {
         this.locizeKeys[locale] = await request<LocizeKeys>({
           headers,
-          url: `${BASE_URL}/${this.projectId}/latest/${locale}/test`,
+          url: `${BASE_URL}/${this.projectId}/${this.version}/${locale}/${this.namespace}`,
           method: 'GET',
         });
       } catch (e) {
@@ -50,7 +55,7 @@ export class Locize implements Provider {
       const response = await request<string>({
         headers,
         body,
-        url: `${BASE_URL}/missing/${this.projectId}/latest/en/test`,
+        url: `${BASE_URL}/missing/${this.projectId}/${this.version}/en/${this.namespace}`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${response}`);

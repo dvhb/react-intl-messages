@@ -40,6 +40,14 @@ export abstract class Base extends Command {
       description: 'Provider`s token',
       env: 'TOKEN',
     }),
+    version: flags.string({
+      description: 'Translations version, for example "production". Required for Locize',
+      env: 'VERSION',
+    }),
+    namespace: flags.string({
+      description: 'Provider`s namespace. Required for Locize',
+      env: 'NAMESPACE',
+    }),
   };
 
   async init() {

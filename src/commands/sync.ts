@@ -75,13 +75,13 @@ export default class Extract extends Base {
 
   async run() {
     const {
-      flags: { langs, provider, projectId, token },
+      flags: { langs, provider, projectId, token, version, namespace },
     } = this.parse(Extract);
 
     const getProvider = () => {
       const providers: { [key: string]: any } = {
         lokalise: () => new Lokalise(projectId, token),
-        locize: () => new Locize(projectId, token),
+        locize: () => new Locize(projectId, token, version, namespace),
       };
       return providers[provider]();
     };
