@@ -4,6 +4,8 @@ import { Message } from '../types';
 
 type LocizeKeys = { [key: string]: { value: string; context: { text: string } } };
 
+const BASE_URL = 'https://api.locize.io';
+
 export class Locize implements Provider {
   locizeKeys: LocizeKeys = {};
   newMessages: string[] = [];
@@ -14,7 +16,7 @@ export class Locize implements Provider {
     try {
       this.locizeKeys = await request<LocizeKeys>({
         headers,
-        url: `https://api.locize.io/${this.projectId}/latest/en/test`,
+        url: `${BASE_URL}/${this.projectId}/latest/en/test`,
         method: 'GET',
       });
     } catch (e) {
@@ -25,7 +27,7 @@ export class Locize implements Provider {
   getMessage(locale: string, id: string) {
     const key = Object.keys(this.locizeKeys).find(key => key === id);
     if (key) {
-      return key;
+      return this.locizeKeys[key].value;
     }
     if (locale === 'en') {
       this.newMessages.push(id);
@@ -46,7 +48,7 @@ export class Locize implements Provider {
       const response = await request<string>({
         headers,
         body,
-        url: `https://api.locize.io/missing/${this.projectId}/latest/en/test`,
+        url: `${BASE_URL}/missing/${this.projectId}/latest/en/test`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${response}`);
