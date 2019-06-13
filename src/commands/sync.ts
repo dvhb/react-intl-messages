@@ -91,7 +91,7 @@ export default class Extract extends Base {
 
     const locales = langs.split(',');
 
-    await this.provider.getKeys();
+    await this.provider.getKeys(locales);
     await Promise.all(locales.map(locale => this.mergeToFile(locale)));
     const newMessages = this.provider.getNewMessages();
     if (newMessages.length > 0) {

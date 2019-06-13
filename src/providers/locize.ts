@@ -7,27 +7,29 @@ type LocizeKeys = { [key: string]: { value: string; context: { text: string } } 
 const BASE_URL = 'https://api.locize.io';
 
 export class Locize implements Provider {
-  locizeKeys: LocizeKeys = {};
+  locizeKeys: { [locale: string]: LocizeKeys } = {};
   newMessages: string[] = [];
   constructor(private projectId?: string, private apiKey?: string) {}
 
-  async getKeys() {
+  async getKeys(locales: string[]) {
     const headers = { 'content-type': 'application/json' };
-    try {
-      this.locizeKeys = await request<LocizeKeys>({
-        headers,
-        url: `${BASE_URL}/${this.projectId}/latest/en/test`,
-        method: 'GET',
-      });
-    } catch (e) {
-      showError(`Error while fetching strings from locize\n${e}`);
-    }
+    locales.forEach(async locale => {
+      try {
+        this.locizeKeys[locale] = await request<LocizeKeys>({
+          headers,
+          url: `${BASE_URL}/${this.projectId}/latest/${locale}/test`,
+          method: 'GET',
+        });
+      } catch (e) {
+        showError(`Error while fetching strings from locize\n${e}`);
+      }
+    });
   }
 
   getMessage(locale: string, id: string) {
-    const key = Object.keys(this.locizeKeys).find(key => key === id);
+    const key = Object.keys(this.locizeKeys[locale]).find(key => key === id);
     if (key) {
-      return this.locizeKeys[key].value;
+      return this.locizeKeys[locale][key].value;
     }
     if (locale === 'en') {
       this.newMessages.push(id);
