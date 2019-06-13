@@ -1,6 +1,6 @@
 {
   "name": "@dvhb/react-intl-messages",
-  "version": "0.0.0-development",
+  "version": "2.1.2",
   "description": "Library for parsing source files and extract react-intl messages",
   "keywords": [
     "lokalise.co",
@@ -79,6 +79,7 @@
     "@types/dotenv": "^6.1.1",
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.13",
+    "@types/nock": "^10.0.3",
     "@types/node": "^10.12.26",
     "babel-preset-react-app": "^9.0.0",
     "chai": "^4.2.0",

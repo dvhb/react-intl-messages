@@ -15,11 +15,11 @@ afterAll(() => {
 });
 
 describe('sync lokalise', () => {
-  const projectId = process.env.LOKALISE_PROJECT_ID;
-  const token = process.env.LOKALISE_TOKEN;
+  const projectId = process.env.PROJECT_ID;
+  const token = process.env.TOKEN;
 
   test
-    .env({ LOKALISE_PROJECT_ID: projectId, LOKALISE_TOKEN: token })
+    .env({ PROJECT_ID: projectId, TOKEN: token })
     .nock('https://api.lokalise.co', api =>
       api
         .get(`/api2/projects/${projectId}/keys`)
@@ -32,13 +32,13 @@ describe('sync lokalise', () => {
         .reply(200, lokaliseKeysJson),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir, '--lokalise'])
+    .command(['sync', '--messagesDir', messagesDir, '--provider', 'lokalise'])
     .it('upload new message to lokalise', ctx => {
       expect(ctx.stderr).toBe('');
     });
 
   test
-    .env({ LOKALISE_PROJECT_ID: projectId, LOKALISE_TOKEN: token })
+    .env({ PROJECT_ID: projectId, TOKEN: token })
     .nock('https://api.lokalise.co', api =>
       api
         .get(`/api2/projects/${projectId}/keys`)
@@ -49,7 +49,7 @@ describe('sync lokalise', () => {
         }),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir, '--lokalise'])
+    .command(['sync', '--messagesDir', messagesDir, '--provider', 'lokalise'])
     .it('update existing message lokalise', ctx => {
       expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot();
       expect(ctx.stderr).toBe('');
@@ -57,11 +57,11 @@ describe('sync lokalise', () => {
 });
 
 describe('sync locize', () => {
-  const projectId = process.env.LOCIZE_PROJECT_ID;
-  const token = process.env.LOCIZE_TOKEN;
+  const projectId = process.env.PROJECT_ID;
+  const token = process.env.TOKEN;
 
   test
-    .env({ LOCIZE_PROJECT_ID: projectId, LOCIZE_TOKEN: token })
+    .env({ PROJECT_ID: projectId, TOKEN: token })
     .nock('https://api.locize.io', api =>
       api
         .get(`/${projectId}/latest/en/test`)
@@ -73,19 +73,19 @@ describe('sync locize', () => {
         .reply(200, lokaliseKeysJson),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir, '--locize'])
+    .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])
     .it('upload new message to locize', ctx => {
       expect(ctx.stderr).toBe('');
     });
   test
-    .env({ LOCIZE_PROJECT_ID: projectId, LOCIZE_TOKEN: token })
+    .env({ PROJECT_ID: projectId, TOKEN: token })
     .nock('https://api.locize.io', api =>
       api
         .get(`/${projectId}/latest/en/test`)
         .reply(200, { welcome: { context: { text: 'Welcome message' }, value: 'Hello!' } }),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir, '--locize'])
+    .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])
     .it('update local message from locize', ctx => {
       expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot();
       expect(ctx.stderr).toBe('');

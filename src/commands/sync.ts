@@ -75,12 +75,15 @@ export default class Extract extends Base {
 
   async run() {
     const {
-      flags: { langs, lokalise, locize, lokaliseToken, lokaliseProjectId, locizeApiKey, locizeProjectId },
+      flags: { langs, provider, projectId, token },
     } = this.parse(Extract);
 
     const getProvider = () => {
-      if (lokalise) return new Lokalise(lokaliseProjectId, lokaliseToken);
-      if (locize) return new Locize(locizeProjectId, locizeApiKey);
+      const providers: { [key: string]: any } = {
+        lokalise: () => new Lokalise(projectId, token),
+        locize: () => new Locize(projectId, token),
+      };
+      return providers[provider]();
     };
 
     this.provider = getProvider();

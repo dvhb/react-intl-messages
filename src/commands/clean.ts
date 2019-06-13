@@ -14,15 +14,15 @@ export default class Clean extends Base {
 
   async getKeys() {
     const {
-      flags: { lokaliseToken, lokaliseProjectId },
+      flags: { token, projectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
 
     try {
       const response = await request<{ keys: LokaliseKey[] }>({
         headers,
         qs: { limit: 5000 },
-        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/keys`,
+        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'GET',
       });
       return response.keys;
@@ -33,13 +33,13 @@ export default class Clean extends Base {
 
   async removeKeys(keys: number[]) {
     const {
-      flags: { lokaliseToken, lokaliseProjectId },
+      flags: { token, projectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     try {
       const response = await request<any>({
         headers,
-        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/keys`,
+        url: `https://api.lokalise.co/api2/projects/${projectId}/keys`,
         method: 'DELETE',
         body: { keys },
       });
@@ -51,13 +51,13 @@ export default class Clean extends Base {
 
   async createSnapshot() {
     const {
-      flags: { lokaliseToken, lokaliseProjectId },
+      flags: { token, projectId },
     } = this.parse(Clean);
-    const headers = { 'x-api-token': lokaliseToken, 'content-type': 'application/json' };
+    const headers = { 'x-api-token': token, 'content-type': 'application/json' };
     try {
       const response = await request<any>({
         headers,
-        url: `https://api.lokalise.co/api2/projects/${lokaliseProjectId}/snapshots`,
+        url: `https://api.lokalise.co/api2/projects/${projectId}/snapshots`,
         method: 'POST',
         body: { title: 'API snapshot' },
       });

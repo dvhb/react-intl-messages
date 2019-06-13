@@ -14,13 +14,13 @@ afterAll(() => {
 });
 
 describe('clean', () => {
-  const projectId = process.env.LOKALISE_PROJECT_ID;
-  const token = process.env.LOKALISE_TOKEN;
+  const projectId = process.env.PROJECT_ID;
+  const token = process.env.TOKEN;
 
   test
     .env({
-      LOKALISE_PROJECT_ID: projectId,
-      LOKALISE_TOKEN: token,
+      PROJECT_ID: projectId,
+      TOKEN: token,
     })
     .nock('https://api.lokalise.co', api =>
       api
@@ -33,7 +33,7 @@ describe('clean', () => {
         .reply(200, { keys_removed: [22743596] }),
     )
     .stderr()
-    .command(['clean', '--messagesDir', messagesDir, '--lokalise'])
+    .command(['clean', '--messagesDir', messagesDir, '--provider', 'lokalise'])
     .it('runs hello', ctx => {
       expect(ctx.stderr).toBe('');
     });
