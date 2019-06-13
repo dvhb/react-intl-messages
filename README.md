@@ -26,7 +26,7 @@ $ npm install -g @dvhb/react-intl-messages
 $ messages COMMAND
 running command...
 $ messages (-v|--version|version)
-@dvhb/react-intl-messages/0.0.3 darwin-x64 node-v10.15.3
+@dvhb/react-intl-messages/2.1.2 darwin-x64 node-v10.16.0
 $ messages --help [COMMAND]
 USAGE
   $ messages COMMAND
@@ -49,13 +49,17 @@ USAGE
   $ messages clean
 
 OPTIONS
-  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
-  -h, --help                     show CLI help
-  -i, --projectId=projectId      (required) Lokalise project id
-  -t, --token=token              (required) Lokalise token
+  -d, --messagesDir=messagesDir          (required) [default: src/messages] Directory for extracted messages
+  -h, --help                             show CLI help
+  --locize                               Translation service provider
+  --locizeApiKey=locizeApiKey            Locize api key
+  --locizeProjectId=locizeProjectId      Locize project id
+  --lokalise                             Translation service provider
+  --lokaliseProjectId=lokaliseProjectId  Lokalise project id
+  --lokaliseToken=lokaliseToken          Lokalise token
 ```
 
-_See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.3/src/commands/clean.ts)_
+_See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/clean.ts)_
 
 ## `messages extract`
 
@@ -76,7 +80,7 @@ EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
 
-_See code: [src/commands/extract.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.3/src/commands/extract.ts)_
+_See code: [src/commands/extract.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/extract.ts)_
 
 ## `messages help [COMMAND]`
 
@@ -104,17 +108,21 @@ USAGE
   $ messages sync
 
 OPTIONS
-  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
-  -h, --help                     show CLI help
-  -i, --projectId=projectId      (required) Lokalise project id
-  -l, --langs=langs              (required) Comma separated languages
-  -t, --token=token              (required) Lokalise token
+  -d, --messagesDir=messagesDir          (required) [default: src/messages] Directory for extracted messages
+  -h, --help                             show CLI help
+  -l, --langs=langs                      (required) Comma separated languages
+  --locize                               Translation service provider
+  --locizeApiKey=locizeApiKey            Locize api key
+  --locizeProjectId=locizeProjectId      Locize project id
+  --lokalise                             Translation service provider
+  --lokaliseProjectId=lokaliseProjectId  Lokalise project id
+  --lokaliseToken=lokaliseToken          Lokalise token
 
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
 
-_See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v0.0.3/src/commands/sync.ts)_
+_See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/sync.ts)_
 <!-- commandsstop -->
 
 # Config
