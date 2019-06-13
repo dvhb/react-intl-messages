@@ -21,6 +21,7 @@ class App extends Component {
                       one {message}
                       other {messages}
                     }`}
+          description="Welcome message"
           values={{ name: <b>{name}</b>, unreadCount }}
         />
       </p>

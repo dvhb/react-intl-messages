@@ -54,7 +54,7 @@ describe('sync locize', () => {
       api
         .get(`/${projectId}/latest/en/test`)
         .reply(200, {})
-        .post(`/update/${projectId}/latest/en/test`, (body: object) => {
+        .post(`/missing/${projectId}/latest/en/test`, (body: object) => {
           expect(body).toMatchSnapshot();
           return true;
         })

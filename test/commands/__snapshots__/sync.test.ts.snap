@@ -2,7 +2,12 @@
 
 exports[`sync locize runs sync 1`] = `
 Object {
-  "welcome": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+  "welcome": Object {
+    "context": Object {
+      "text": "Welcome message",
+    },
+    "value": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+  },
 }
 `;
 
@@ -10,6 +15,7 @@ exports[`sync lokalise runs sync 1`] = `
 Object {
   "keys": Array [
     Object {
+      "description": "Welcome message",
       "key_name": "welcome",
       "platforms": Array [
         "ios",

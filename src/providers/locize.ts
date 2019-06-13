@@ -2,7 +2,7 @@ import { Provider } from './provider';
 import { request, showError, showInfo } from '../utils';
 import { Message } from '../types';
 
-type LocizeKeys = { [key: string]: string };
+type LocizeKeys = { [key: string]: { value: string; context: { text: string } } };
 
 export class Locize implements Provider {
   locizeKeys: LocizeKeys = {};
@@ -36,8 +36,8 @@ export class Locize implements Provider {
   async uploadMessages(messages: Message[]) {
     const headers = { Authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' };
     const body = messages.reduce(
-      (acc, { id, message, defaultMessage }) => {
-        acc[id] = message || defaultMessage;
+      (acc, { id, message, defaultMessage, description }) => {
+        acc[id] = { value: message || defaultMessage, context: { text: description || '' } };
         return acc;
       },
       {} as LocizeKeys,
@@ -46,7 +46,7 @@ export class Locize implements Provider {
       const response = await request<string>({
         headers,
         body,
-        url: `https://api.locize.io/update/${this.projectId}/latest/en/test`,
+        url: `https://api.locize.io/missing/${this.projectId}/latest/en/test`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${response}`);

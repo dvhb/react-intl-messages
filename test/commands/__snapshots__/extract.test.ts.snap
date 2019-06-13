@@ -4,6 +4,7 @@ exports[`extract extract messages into en.json 1`] = `
 Array [
   Object {
     "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+    "description": "Welcome message",
     "files": Array [
       "src/App.js",
     ],
