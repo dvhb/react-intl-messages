@@ -1,5 +1,5 @@
 import { Provider } from './provider';
-import { request, showError, showInfo } from '../utils';
+import { asyncForEach, request, showError, showInfo } from '../utils';
 import { Message } from '../types';
 
 type LocizeKeys = { [key: string]: { value: string; context: { text: string } } };
@@ -18,7 +18,7 @@ export class Locize implements Provider {
 
   async getKeys(locales: string[]) {
     const headers = { 'content-type': 'application/json' };
-    locales.forEach(async locale => {
+    asyncForEach(locales, async (locale: string) => {
       try {
         this.locizeKeys[locale] = await request<LocizeKeys>({
           headers,
