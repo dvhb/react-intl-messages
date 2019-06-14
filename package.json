@@ -1,6 +1,6 @@
 {
   "name": "@dvhb/react-intl-messages",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Library for parsing source files and extract react-intl messages",
   "keywords": [
     "lokalise.co",
