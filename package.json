@@ -30,7 +30,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "semantic-release": "semantic-release",
     "test": "jest",
-    "posttest": "tslint -p test -t stylish",
+    "posttest": "tslint -p . -t stylish",
     "version": "oclif-dev readme && git add README.md"
   },
   "husky": {
