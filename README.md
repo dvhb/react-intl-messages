@@ -26,7 +26,7 @@ $ npm install -g @dvhb/react-intl-messages
 $ messages COMMAND
 running command...
 $ messages (-v|--version|version)
-@dvhb/react-intl-messages/2.1.2 darwin-x64 node-v10.16.0
+@dvhb/react-intl-messages/2.2.1 darwin-x64 node-v10.16.0
 $ messages --help [COMMAND]
 USAGE
   $ messages COMMAND
@@ -58,7 +58,7 @@ OPTIONS
   --version=version              Translations version, for example "production". Required for Locize
 ```
 
-_See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/clean.ts)_
+_See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v2.2.1/src/commands/clean.ts)_
 
 ## `messages extract`
 
@@ -79,7 +79,7 @@ EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
 
-_See code: [src/commands/extract.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/extract.ts)_
+_See code: [src/commands/extract.ts](https://github.com/dvhb/react-intl-messages/blob/v2.2.1/src/commands/extract.ts)_
 
 ## `messages help [COMMAND]`
 
@@ -120,7 +120,7 @@ EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
 ```
 
-_See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/sync.ts)_
+_See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v2.2.1/src/commands/sync.ts)_
 <!-- commandsstop -->
 
 # Config
