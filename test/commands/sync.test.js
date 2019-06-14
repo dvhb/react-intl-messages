@@ -1,6 +1,6 @@
-import { test } from '@oclif/test';
-import { copyFile, mkdir, readJson, rmdir } from '../utils';
-import * as lokaliseKeysJson from './__mocks__/lokaliseKeys.json';
+const { test } = require('@oclif/test');
+const { copyFile, mkdir, readJson, rmdir } = require('../utils');
+const lokaliseKeysJson = require('./__mocks__/lokaliseKeys.json');
 
 const messagesDir = 'messagesSync';
 
@@ -25,7 +25,7 @@ describe('sync lokalise', () => {
         .get(`/api2/projects/${projectId}/keys`)
         .query(true)
         .reply(200, { project_id: '139504615bd04772c3b220.60315670', keys: [] })
-        .post(`/api2/projects/${projectId}/keys`, (body: object) => {
+        .post(`/api2/projects/${projectId}/keys`, body => {
           expect(body).toMatchSnapshot();
           return true;
         })
@@ -66,7 +66,7 @@ describe('sync locize', () => {
       api
         .get(`/${projectId}/latest/en/test`)
         .reply(200, {})
-        .post(`/missing/${projectId}/latest/en/test`, (body: object) => {
+        .post(`/missing/${projectId}/latest/en/test`, body => {
           expect(body).toMatchSnapshot();
           return true;
         })

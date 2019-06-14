@@ -1,6 +1,6 @@
-import { test } from '@oclif/test';
-import { copyFile, mkdir, rmdir } from '../utils';
-import * as lokaliseKeysJson from './__mocks__/lokaliseKeys.json';
+const { test } = require('@oclif/test');
+const { copyFile, mkdir, rmdir } = require('../utils');
+const lokaliseKeysJson = require('./__mocks__/lokaliseKeys.json');
 
 const messagesDir = 'messagesClean';
 

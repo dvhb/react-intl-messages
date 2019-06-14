@@ -1,5 +1,5 @@
-import { test } from '@oclif/test';
-import { readJson, mkdir, rmdir } from '../utils';
+const { test } = require('@oclif/test');
+const { readJson, mkdir, rmdir } = require('../utils');
 
 const messagesDir = 'messagesExtract';
 
