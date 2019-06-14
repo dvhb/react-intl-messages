@@ -49,14 +49,13 @@ USAGE
   $ messages clean
 
 OPTIONS
-  -d, --messagesDir=messagesDir          (required) [default: src/messages] Directory for extracted messages
-  -h, --help                             show CLI help
-  --locize                               Translation service provider
-  --locizeApiKey=locizeApiKey            Locize api key
-  --locizeProjectId=locizeProjectId      Locize project id
-  --lokalise                             Translation service provider
-  --lokaliseProjectId=lokaliseProjectId  Lokalise project id
-  --lokaliseToken=lokaliseToken          Lokalise token
+  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
+  -h, --help                     show CLI help
+  --namespace=namespace          Provider`s namespace. Required for Locize
+  --projectId=projectId          Provider`s project id
+  --provider=lokalise|locize     (required) Translation service provider
+  --token=token                  Provider`s token
+  --version=version              Translations version, for example "production". Required for Locize
 ```
 
 _See code: [src/commands/clean.ts](https://github.com/dvhb/react-intl-messages/blob/v2.1.2/src/commands/clean.ts)_
@@ -108,15 +107,14 @@ USAGE
   $ messages sync
 
 OPTIONS
-  -d, --messagesDir=messagesDir          (required) [default: src/messages] Directory for extracted messages
-  -h, --help                             show CLI help
-  -l, --langs=langs                      (required) Comma separated languages
-  --locize                               Translation service provider
-  --locizeApiKey=locizeApiKey            Locize api key
-  --locizeProjectId=locizeProjectId      Locize project id
-  --lokalise                             Translation service provider
-  --lokaliseProjectId=lokaliseProjectId  Lokalise project id
-  --lokaliseToken=lokaliseToken          Lokalise token
+  -d, --messagesDir=messagesDir  (required) [default: src/messages] Directory for extracted messages
+  -h, --help                     show CLI help
+  -l, --langs=langs              (required) Comma separated languages
+  --namespace=namespace          Provider`s namespace. Required for Locize
+  --projectId=projectId          Provider`s project id
+  --provider=lokalise|locize     (required) Translation service provider
+  --token=token                  Provider`s token
+  --version=version              Translations version, for example "production". Required for Locize
 
 EXAMPLE
   $ messages extract --langs=en,fr,de,ru --pattern="src/**/*.{ts,tsx}"
