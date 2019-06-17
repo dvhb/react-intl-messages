@@ -55,7 +55,7 @@ export default class Extract extends Base {
       msg.description = newMsg.description || msg.description;
       msg.defaultMessage = newMsg.defaultMessage || msg.defaultMessage;
       if (this.provider) {
-        msg.message = this.provider.getMessage(locale, id);
+        msg.message = this.provider.getMessage(locale, id) || msg.message;
       }
       msg.files = newMsg.files;
     });
@@ -107,7 +107,7 @@ export default class Extract extends Base {
     if (newMessages.length > 0) {
       showInfo(`New translation keys: ${newMessages.length}`);
       if (provider === 'locize') {
-        asyncForEach(locales, locale =>
+        await asyncForEach(locales, locale =>
           this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]), locale),
         );
       } else {

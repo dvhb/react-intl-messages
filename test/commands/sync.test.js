@@ -5,14 +5,14 @@ const locizeKeysJson = require('./__mocks__/locizeKeys.json');
 
 const messagesDir = 'messagesSync';
 
-beforeAll(() => {
+beforeEach(() => {
   mkdir(messagesDir);
   copyFile('__mock__/en.json', `${messagesDir}/_default.json`);
   copyFile('__mock__/en.json', `${messagesDir}/en.json`);
   copyFile('__mock__/ru.json', `${messagesDir}/ru.json`);
 });
 
-afterAll(() => {
+afterEach(() => {
   rmdir(messagesDir);
 });
 
@@ -68,8 +68,15 @@ describe('sync locize', () => {
       api
         .get(`/${projectId}/latest/en/test`)
         .reply(200, {})
+        .get(`/${projectId}/latest/ru/test`)
+        .reply(200, {})
         .post(`/missing/${projectId}/latest/en/test`, body => {
-          expect(body).toMatchSnapshot();
+          expect(body).toMatchSnapshot('en');
+          return true;
+        })
+        .reply(200, locizeKeysJson)
+        .post(`/update/${projectId}/latest/ru/test`, body => {
+          expect(body).toMatchSnapshot('ru');
           return true;
         })
         .reply(200, locizeKeysJson),
@@ -81,11 +88,17 @@ describe('sync locize', () => {
     });
   test
     .env({ PROJECT_ID: projectId, TOKEN: token })
-    .nock('https://api.locize.io', api => api.get(`/${projectId}/latest/en/test`).reply(200, { welcome: 'Hello!' }))
+    .nock('https://api.locize.io', api =>
+      api
+        .get(`/${projectId}/latest/en/test`)
+        .reply(200, { welcome: 'Hello!' })
+        .get(`/${projectId}/latest/ru/test`)
+        .reply(200, { welcome: 'Привет!' }),
+    )
     .stderr()
     .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])
     .it('update local message from locize', ctx => {
-      expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot();
+      expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot('file/en.json');
       expect(ctx.stderr).toBe('');
     });
 });
