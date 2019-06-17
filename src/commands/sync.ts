@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { readFile, showError, showInfo, writeFile } from '../utils';
+import { asyncForEach, readFile, showError, showInfo, writeFile } from '../utils';
 import { Base } from '../base';
 import { Lokalise } from '../providers/lokalise';
 import { Provider } from '../providers/provider';
@@ -21,14 +21,14 @@ export default class Extract extends Base {
     ...Base.providersFlags,
   };
   provider?: Provider;
-  messages: { [id: string]: Message } = {};
+  messages: { [locale: string]: { [id: string]: Message } } = {};
 
   async mergeToFile(locale: string) {
     const {
       flags: { messagesDir },
     } = this.parse(Extract);
     const fileName = path.join(messagesDir, `${locale}.json`);
-    const originalMessages: { [id: string]: Message } = this.messages;
+    const originalMessages: { [id: string]: Message } = this.messages[locale];
     try {
       const oldFile = await readFile(fileName);
 
@@ -93,13 +93,23 @@ export default class Extract extends Base {
     }
 
     const locales = langs.split(',');
+    this.messages = locales.reduce(
+      (acc, locale) => {
+        acc[locale] = {};
+        return acc;
+      },
+      {} as { [locale: string]: { [id: string]: Message } },
+    );
 
     await this.provider.getKeys(locales);
     await Promise.all(locales.map(locale => this.mergeToFile(locale)));
     const newMessages = this.provider.getNewMessages();
     if (newMessages.length > 0) {
       showInfo(`New translation keys: ${newMessages.length}`);
-      await this.provider.uploadMessages(newMessages.map(id => this.messages[id]));
+      await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), locales);
+      asyncForEach(locales, locale =>
+        this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]), locales),
+      );
     }
   }
 }
