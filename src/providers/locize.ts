@@ -59,7 +59,7 @@ export class Locize implements Provider {
         url: `${BASE_URL}/missing/${this.projectId}/${this.version}/en/${this.namespace}`,
         method: 'POST',
       });
-      showInfo(`Response from locize: ${response}`);
+      showInfo(`Response from locize: ${JSON.stringify(response, null, 2)}`);
     } catch (e) {
       showError(`Error while uploading strings to locize\n${e}`);
     }
