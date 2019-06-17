@@ -43,7 +43,7 @@ export class Locize implements Provider {
     return '';
   }
 
-  async uploadMessages(messages: Message[], locales: string[]) {
+  async uploadMessages(messages: Message[], locale: string) {
     const headers = { Authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' };
     const body = messages.reduce(
       (acc, { id, message, defaultMessage, description }) => {
@@ -56,7 +56,9 @@ export class Locize implements Provider {
       const response = await request<string>({
         headers,
         body,
-        url: `${BASE_URL}/missing/${this.projectId}/${this.version}/en/${this.namespace}`,
+        url: `${BASE_URL}/${locale === 'en' ? 'missing' : 'update'}/${this.projectId}/${this.version}/${locale}/${
+          this.namespace
+        }`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${JSON.stringify(response, null, 2)}`);

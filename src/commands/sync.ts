@@ -106,10 +106,13 @@ export default class Extract extends Base {
     const newMessages = this.provider.getNewMessages();
     if (newMessages.length > 0) {
       showInfo(`New translation keys: ${newMessages.length}`);
-      await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), locales);
-      asyncForEach(locales, locale =>
-        this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]), locales),
-      );
+      if (provider === 'locize') {
+        asyncForEach(locales, locale =>
+          this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]), locale),
+        );
+      } else {
+        await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), 'en');
+      }
     }
   }
 }
