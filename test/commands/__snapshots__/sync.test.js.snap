@@ -1,19 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`sync locize update local message from locize 1`] = `
-Array [
-  Object {
-    "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
-    "description": "Welcome message",
-    "files": Array [
-      "src/App.js",
-    ],
-    "id": "welcome",
-    "message": "Hello!",
-  },
-]
-`;
-
 exports[`sync locize update local message from locize: file/en.json 1`] = `
 Array [
   Object {
@@ -26,17 +12,6 @@ Array [
     "message": "Hello!",
   },
 ]
-`;
-
-exports[`sync locize upload new message to locize 1`] = `
-Object {
-  "welcome": Object {
-    "context": Object {
-      "text": "Welcome message",
-    },
-    "value": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
-  },
-}
 `;
 
 exports[`sync locize upload new message to locize: en 1`] = `
