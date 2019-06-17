@@ -2,7 +2,8 @@ import { Provider } from './provider';
 import { asyncForEach, request, showError, showInfo } from '../utils';
 import { Message } from '../types';
 
-type LocizeKeys = { [key: string]: { value: string; context: { text: string } } };
+type LocizeKeys = { [key: string]: string };
+type LocizeUploadKeys = { [key: string]: { value: string; context: { text: string } } };
 
 const BASE_URL = 'https://api.locize.io';
 
@@ -34,7 +35,7 @@ export class Locize implements Provider {
   getMessage(locale: string, id: string) {
     const key = Object.keys(this.locizeKeys[locale]).find(key => key === id);
     if (key) {
-      return this.locizeKeys[locale][key].value;
+      return this.locizeKeys[locale][key];
     }
     if (locale === 'en') {
       this.newMessages.push(id);
@@ -49,7 +50,7 @@ export class Locize implements Provider {
         acc[id] = { value: message || defaultMessage, context: { text: description || '' } };
         return acc;
       },
-      {} as LocizeKeys,
+      {} as LocizeUploadKeys,
     );
     try {
       const response = await request<string>({

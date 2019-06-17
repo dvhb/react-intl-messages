@@ -79,11 +79,7 @@ describe('sync locize', () => {
     });
   test
     .env({ PROJECT_ID: projectId, TOKEN: token })
-    .nock('https://api.locize.io', api =>
-      api
-        .get(`/${projectId}/latest/en/test`)
-        .reply(200, { welcome: { context: { text: 'Welcome message' }, value: 'Hello!' } }),
-    )
+    .nock('https://api.locize.io', api => api.get(`/${projectId}/latest/en/test`).reply(200, { welcome: 'Hello!' }))
     .stderr()
     .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])
     .it('update local message from locize', ctx => {
