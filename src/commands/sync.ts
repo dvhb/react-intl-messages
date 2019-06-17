@@ -93,13 +93,9 @@ export default class Extract extends Base {
     }
 
     const locales = langs.split(',');
-    this.messages = locales.reduce(
-      (acc, locale) => {
-        acc[locale] = {};
-        return acc;
-      },
-      {} as { [locale: string]: { [id: string]: Message } },
-    );
+    locales.forEach(locale => {
+      this.messages[locale] = {};
+    });
 
     await this.provider.getKeys(locales);
     await Promise.all(locales.map(locale => this.mergeToFile(locale)));
@@ -108,7 +104,7 @@ export default class Extract extends Base {
       showInfo(`New translation keys: ${newMessages.length}`);
       if (provider === 'locize') {
         await asyncForEach(locales, locale =>
-          this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]), locale),
+          this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]).filter(Boolean), locale),
         );
       } else {
         await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), 'en');
