@@ -18,7 +18,7 @@ export class Locize implements Provider {
 
   async getKeys(locales: string[]) {
     const headers = { 'content-type': 'application/json' };
-    asyncForEach(locales, async (locale: string) => {
+    return asyncForEach(locales, async (locale: string) => {
       try {
         this.locizeKeys[locale] = await request<LocizeKeys>({
           headers,
