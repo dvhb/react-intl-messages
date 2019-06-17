@@ -1,6 +1,7 @@
 const { test } = require('@oclif/test');
 const { copyFile, mkdir, readJson, rmdir } = require('../utils');
 const lokaliseKeysJson = require('./__mocks__/lokaliseKeys.json');
+const locizeKeysJson = require('./__mocks__/locizeKeys.json');
 
 const messagesDir = 'messagesSync';
 
@@ -8,6 +9,7 @@ beforeAll(() => {
   mkdir(messagesDir);
   copyFile('__mock__/en.json', `${messagesDir}/_default.json`);
   copyFile('__mock__/en.json', `${messagesDir}/en.json`);
+  copyFile('__mock__/ru.json', `${messagesDir}/ru.json`);
 });
 
 afterAll(() => {
@@ -70,7 +72,7 @@ describe('sync locize', () => {
           expect(body).toMatchSnapshot();
           return true;
         })
-        .reply(200, lokaliseKeysJson),
+        .reply(200, locizeKeysJson),
     )
     .stderr()
     .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])

@@ -1,4 +1,4 @@
 module.exports = {
-  langs: 'en',
+  langs: 'en,ru',
   pattern: 'src/*.js',
 };
