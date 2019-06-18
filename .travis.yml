@@ -4,6 +4,10 @@ node_js:
   - '10'
   - '8'
 
+branches:
+  except:
+    - /^v[0-9]/
+
 jobs:
   include:
     - stage: release
