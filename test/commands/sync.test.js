@@ -47,7 +47,10 @@ describe('sync lokalise', () => {
         .query(true)
         .reply(200, {
           project_id: '139504615bd04772c3b220.60315670',
-          keys: [{ key_name: { web: 'welcome' }, translations: [{ translation: 'Hello!', language_iso: 'en' }] }],
+          keys: [
+            { key_name: { web: 'welcome' }, translations: [{ translation: 'Hello!', language_iso: 'en' }] },
+            { key_name: { web: 'logInfo' }, translations: [{ translation: 'Log info', language_iso: 'en' }] },
+          ],
         }),
     )
     .stderr()
@@ -71,12 +74,12 @@ describe('sync locize', () => {
         .get(`/${projectId}/latest/ru/test`)
         .reply(200, {})
         .post(`/missing/${projectId}/latest/en/test`, body => {
-          expect(body).toMatchSnapshot('en');
+          expect(body).toMatchSnapshot('missing/en');
           return true;
         })
         .reply(200, locizeKeysJson)
         .post(`/update/${projectId}/latest/ru/test`, body => {
-          expect(body).toMatchSnapshot('ru');
+          expect(body).toMatchSnapshot('missing/ru');
           return true;
         })
         .reply(200, locizeKeysJson),
@@ -91,7 +94,7 @@ describe('sync locize', () => {
     .nock('https://api.locize.io', api =>
       api
         .get(`/${projectId}/latest/en/test`)
-        .reply(200, { welcome: 'Hello!' })
+        .reply(200, { welcome: 'Hello!', logInfo: 'Log info' })
         .get(`/${projectId}/latest/ru/test`)
         .reply(200, { welcome: 'Привет!' }),
     )

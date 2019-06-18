@@ -3,6 +3,38 @@
 exports[`extract extract messages into en.json 1`] = `
 Array [
   Object {
+    "defaultMessage": "Log info",
+    "description": "message in console",
+    "files": Array [
+      "src/App.js",
+    ],
+    "id": "logInfo",
+    "message": "",
+  },
+  Object {
+    "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+    "description": "Welcome message",
+    "files": Array [
+      "src/App.js",
+    ],
+    "id": "welcome",
+    "message": "",
+  },
+]
+`;
+
+exports[`extract extract providerMessages into en.json 1`] = `
+Array [
+  Object {
+    "defaultMessage": "Log info",
+    "description": "message in console",
+    "files": Array [
+      "src/App.js",
+    ],
+    "id": "logInfo",
+    "message": "",
+  },
+  Object {
     "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
     "description": "Welcome message",
     "files": Array [

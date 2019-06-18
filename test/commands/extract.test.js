@@ -15,7 +15,7 @@ describe('extract', () => {
   test
     .stdout()
     .command(['extract', '--messagesDir', messagesDir])
-    .it('extract messages into en.json', () => {
+    .it('extract providerMessages into en.json', () => {
       expect(readJson(`${messagesDir}/en.json`)).toMatchSnapshot();
     });
 });

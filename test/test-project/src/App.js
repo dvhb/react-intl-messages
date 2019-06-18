@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
+
+const messages = defineMessages({
+  logInfo: { id: 'logInfo', defaultMessage: 'Log info', description: 'message in console' },
+});
 
 class App extends Component {
   constructor(props) {
@@ -13,6 +17,7 @@ class App extends Component {
   render() {
     const { name, unreadCount } = this.state;
 
+    console.info(messages.logInfo);
     return (
       <p>
         <FormattedMessage

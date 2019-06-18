@@ -11,11 +11,26 @@ Array [
     "id": "welcome",
     "message": "Hello!",
   },
+  Object {
+    "defaultMessage": "Log info",
+    "description": "message in console",
+    "files": Array [
+      "src/App.js",
+    ],
+    "id": "logInfo",
+    "message": "Log info",
+  },
 ]
 `;
 
-exports[`sync locize upload new message to locize: en 1`] = `
+exports[`sync locize upload new message to locize: missing/en 1`] = `
 Object {
+  "logInfo": Object {
+    "context": Object {
+      "text": "message in console",
+    },
+    "value": "Log info",
+  },
   "welcome": Object {
     "context": Object {
       "text": "Welcome message",
@@ -25,8 +40,14 @@ Object {
 }
 `;
 
-exports[`sync locize upload new message to locize: ru 1`] = `
+exports[`sync locize upload new message to locize: missing/ru 1`] = `
 Object {
+  "logInfo": Object {
+    "context": Object {
+      "text": "message in console",
+    },
+    "value": "Log info",
+  },
   "welcome": Object {
     "context": Object {
       "text": "Welcome message",
@@ -47,6 +68,15 @@ Array [
     "id": "welcome",
     "message": "Hello!",
   },
+  Object {
+    "defaultMessage": "Log info",
+    "description": "message in console",
+    "files": Array [
+      "src/App.js",
+    ],
+    "id": "logInfo",
+    "message": "Log info",
+  },
 ]
 `;
 
@@ -66,6 +96,22 @@ Object {
         Object {
           "language_iso": "en",
           "translation": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
+        },
+      ],
+    },
+    Object {
+      "description": "message in console",
+      "key_name": "logInfo",
+      "platforms": Array [
+        "ios",
+        "android",
+        "web",
+        "other",
+      ],
+      "translations": Array [
+        Object {
+          "language_iso": "en",
+          "translation": "Log info",
         },
       ],
     },

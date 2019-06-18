@@ -4,8 +4,13 @@
     "defaultMessage": "Hello {name}, you have {unreadCount, number} {unreadCount, plural, one {message} other {messages}}",
     "message": "",
     "description": "Welcome message",
-    "files": [
-      "src/App.js"
-    ]
+    "files": ["src/App.js"]
+  },
+  {
+    "id": "logInfo",
+    "defaultMessage": "Log info",
+    "message": "",
+    "description": "message in console",
+    "files": ["src/App.js"]
   }
 ]
