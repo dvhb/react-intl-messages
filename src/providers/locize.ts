@@ -47,7 +47,10 @@ export class Locize implements Provider {
     const headers = { Authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' };
     const body = messages.reduce(
       (acc, { id, message, defaultMessage, description }) => {
-        acc[id] = { value: message || defaultMessage, context: { text: description || '' } };
+        acc[id] = {
+          value: locale === 'en' ? message || defaultMessage : message || '',
+          context: { text: description || '' },
+        };
         return acc;
       },
       {} as LocizeUploadKeys,

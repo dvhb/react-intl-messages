@@ -46,7 +46,7 @@ Object {
     "context": Object {
       "text": "message in console",
     },
-    "value": "Log info",
+    "value": "",
   },
   "welcome": Object {
     "context": Object {
