@@ -21,6 +21,14 @@ export const writeFile = (file: string, contents: string): Promise<void> =>
 
 export const posixPath = (fileName: string) => fileName.replace(/\\/g, '/');
 
+export const toHash = <T>(array: T[], key: string): { [id: string]: T } =>
+  Array.prototype.reduce.call(
+    array,
+    // @ts-ignore
+    (acc: { [id: string]: T }, data: T, index: number) => ((acc[key ? data[key] : index] = data), acc),
+    {},
+  );
+
 type Options = https.RequestOptions & {
   url: string;
   body?: object;

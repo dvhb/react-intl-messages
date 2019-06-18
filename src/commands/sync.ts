@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { asyncForEach, readFile, showError, showInfo, writeFile } from '../utils';
+import { asyncForEach, readFile, showError, showInfo, toHash, writeFile } from '../utils';
 import { Base } from '../base';
 import { Lokalise } from '../providers/lokalise';
 import { Provider } from '../providers/provider';
@@ -23,46 +23,31 @@ export default class Extract extends Base {
   provider?: Provider;
   messages: { [locale: string]: { [id: string]: Message } } = {};
 
-  async mergeToFile(locale: string) {
-    const {
-      flags: { messagesDir },
-    } = this.parse(Extract);
-    const fileName = path.join(messagesDir, `${locale}.json`);
-    const originalMessages: { [id: string]: Message } = this.messages[locale];
+  static async readMessages(fileName: string) {
     try {
-      const oldFile = await readFile(fileName);
-
-      let oldJson;
       try {
-        oldJson = JSON.parse(oldFile);
+        return JSON.parse(await readFile(fileName)) as Message[];
       } catch (err) {
         throw new Error(`Error parsing messages JSON in file ${fileName}`);
       }
-
-      oldJson.forEach((message: Message) => {
-        originalMessages[message.id] = message;
-      });
     } catch (err) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
     }
+  }
 
-    Object.keys(originalMessages).forEach(id => {
-      const newMsg = originalMessages[id];
-      originalMessages[id] = originalMessages[id] || { id };
-      const msg = originalMessages[id];
-      msg.description = newMsg.description || msg.description;
-      msg.defaultMessage = newMsg.defaultMessage || msg.defaultMessage;
-      if (this.provider) {
-        msg.message = this.provider.getMessage(locale, id) || msg.message;
-      }
-      msg.files = newMsg.files;
-    });
+  async mergeToFile(locale: string) {
+    const { flags } = this.parse(Extract);
 
-    const result = Object.keys(originalMessages)
-      .map(key => originalMessages[key])
+    const fileName = path.join(flags.messagesDir, `${locale}.json`);
+    const fileMessages = await Extract.readMessages(fileName);
+    if (!fileMessages) return;
+    const result = fileMessages
+      .map(msg => ({ ...msg, message: this.provider!.getMessage(locale, msg.id) || msg.message }))
       .filter(msg => msg.files || msg.message);
+
+    this.messages[locale] = toHash(result, 'id');
 
     await Extract.writeMessages(fileName, result);
 
