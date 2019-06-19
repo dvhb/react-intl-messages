@@ -19,6 +19,7 @@ export class Locize implements Provider {
   ) {}
 
   async getKeys(locales: string[]) {
+    showInfo('Start fetching messages from Locize');
     const headers = { 'content-type': 'application/json' };
     return asyncForEach(locales, async (locale: string) => {
       try {
@@ -27,6 +28,7 @@ export class Locize implements Provider {
           url: `${BASE_URL}/${this.projectId}/${this.version}/${locale}/${this.namespace}`,
           method: 'GET',
         });
+        showInfo('Finish fetching messages from Locize');
       } catch (e) {
         showError(`Error while fetching strings from locize\n${e}`);
       }

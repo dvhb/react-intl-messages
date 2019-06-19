@@ -59,9 +59,9 @@ export default class Extract extends Base {
   }
 
   async run() {
-    const {
-      flags: { langs, provider, projectId, token, version, namespace, uploadTranslations },
-    } = this.parse(Extract);
+    showInfo('Start sync messages');
+    const { flags } = this.parse(Extract);
+    const { langs, provider, projectId, token, version, namespace, uploadTranslations } = flags;
     const locales = langs.split(',');
     const defaultLocale = head(locales);
 
@@ -95,5 +95,6 @@ export default class Extract extends Base {
         );
       }
     }
+    showInfo('Finish sync messages');
   }
 }

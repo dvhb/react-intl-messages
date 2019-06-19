@@ -59,6 +59,7 @@ export class Lokalise implements Provider {
   constructor(private defaultLocale?: string, private projectId?: string, private token?: string) {}
 
   async getKeys() {
+    showInfo('Start fetching messages from Lokalise');
     const headers = { 'x-api-token': this.token, 'content-type': 'application/json' };
     try {
       const response = await request<LocalizeResponse>({
@@ -68,6 +69,7 @@ export class Lokalise implements Provider {
         qs: { include_translations: '1', limit: 5000 },
       });
       this.lokaliseKeys = response.keys;
+      showInfo('Finish fetching messages from Lokalise');
     } catch (e) {
       showError(`Error while fetching strings from lokalise\n${e}`);
     }
