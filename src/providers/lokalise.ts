@@ -86,6 +86,7 @@ export class Lokalise implements Provider {
         method: 'GET',
         qs: { include_translations: '1', limit: 5000 },
       });
+      if (!response || !response.keys) throw Error('Wrong answer from lokalise');
       this.lokaliseKeys = response.keys;
       showInfo('Finish fetching messages from Lokalise');
     } catch (e) {
