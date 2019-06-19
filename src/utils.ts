@@ -34,7 +34,7 @@ export const head = <T>(arr: T[]) => arr[0];
 type Options = https.RequestOptions & {
   url: string;
   body?: object;
-  qs?: object;
+  qs?: querystring.ParsedUrlQueryInput;
 };
 export const request = <T>({ url, body, qs, headers = {}, ...rest }: Options) => {
   const { hostname, pathname } = new URL(url);
