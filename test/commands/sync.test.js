@@ -85,7 +85,7 @@ describe('sync locize', () => {
         .reply(200, locizeKeysJson),
     )
     .stderr()
-    .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize'])
+    .command(['sync', '--messagesDir', messagesDir, '--provider', 'locize', '--uploadTranslations'])
     .it('upload new message to locize', ctx => {
       expect(ctx.stderr).toBe('');
     });

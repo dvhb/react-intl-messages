@@ -44,7 +44,7 @@ export class Locize implements Provider {
     return '';
   }
 
-  async uploadMessages(messages: Message[], locale: string) {
+  async uploadMessages(messages: Message[], locale = this.defaultLocale) {
     const headers = { Authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' };
     const body = messages.reduce(
       (acc, { id, message, defaultMessage, description }) => {

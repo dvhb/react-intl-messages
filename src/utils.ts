@@ -28,6 +28,8 @@ export const toHash = <T>(array: T[], key: string): { [id: string]: T } =>
     (acc: { [id: string]: T }, data: T, index: number) => ((acc[key ? data[key] : index] = data), acc),
     {},
   );
+export const tail = <T>(arr: T[]) => (arr.length > 1 ? arr.slice(1) : arr);
+export const head = <T>(arr: T[]) => arr[0];
 
 type Options = https.RequestOptions & {
   url: string;

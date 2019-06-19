@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { asyncForEach, readFile, showError, showInfo, toHash, writeFile } from '../utils';
+import { asyncForEach, readFile, showError, showInfo, toHash, writeFile, head, tail } from '../utils';
 import { Base } from '../base';
 import { Lokalise } from '../providers/lokalise';
 import { Provider } from '../providers/provider';
@@ -60,10 +60,10 @@ export default class Extract extends Base {
 
   async run() {
     const {
-      flags: { langs, provider, projectId, token, version, namespace },
+      flags: { langs, provider, projectId, token, version, namespace, uploadTranslations },
     } = this.parse(Extract);
     const locales = langs.split(',');
-    const defaultLocale = locales[0];
+    const defaultLocale = head(locales);
 
     const getProvider = () => {
       const providers: { [key: string]: any } = {
@@ -88,12 +88,11 @@ export default class Extract extends Base {
     const newMessages = this.provider.getNewMessages();
     if (newMessages.length > 0) {
       showInfo(`New translation keys: ${newMessages.length}`);
-      if (provider === 'locize') {
-        await asyncForEach(locales, locale =>
+      await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]));
+      if (uploadTranslations && locales.length > 1) {
+        await asyncForEach(tail(locales), locale =>
           this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]).filter(Boolean), locale),
         );
-      } else {
-        await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), defaultLocale);
       }
     }
   }

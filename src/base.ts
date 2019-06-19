@@ -48,6 +48,9 @@ export abstract class Base extends Command {
       description: 'Provider`s namespace. Required for Locize',
       env: 'NAMESPACE',
     }),
+    uploadTranslations: flags.boolean({
+      description: 'Upload existing translations to provider. Useful for provider migration.',
+    }),
   };
 
   async init() {
