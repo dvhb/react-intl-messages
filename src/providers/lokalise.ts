@@ -56,11 +56,19 @@ type LocalizeResponse = {
 export class Lokalise implements Provider {
   lokaliseKeys: LokaliseKey[] = [];
   newMessages: string[] = [];
+
   constructor(private defaultLocale?: string, private projectId?: string, private token?: string) {}
+
+  private getHeaders() {
+    return {
+      'content-type': 'application/json',
+      'x-api-token': `Bearer ${this.token}`,
+    };
+  }
 
   async getKeys() {
     showInfo('Start fetching messages from Lokalise');
-    const headers = { 'x-api-token': this.token, 'content-type': 'application/json' };
+    const headers = this.getHeaders();
     try {
       const response = await request<LocalizeResponse>({
         headers,
@@ -88,7 +96,7 @@ export class Lokalise implements Provider {
   }
 
   async uploadMessages(messages: Message[]) {
-    const headers = { 'x-api-token': this.token, 'content-type': 'application/json' };
+    const headers = this.getHeaders();
     const body = {
       keys: messages.map(message => ({
         key_name: message.id,

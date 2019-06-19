@@ -10,6 +10,14 @@ const BASE_URL = 'https://api.locize.io';
 export class Locize implements Provider {
   locizeKeys: { [locale: string]: LocizeKeys } = {};
   newMessages: string[] = [];
+
+  private static getHeaders(apiKey?: string) {
+    return {
+      'content-type': 'application/json',
+      ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+    };
+  }
+
   constructor(
     private defaultLocale?: string,
     private projectId?: string,
@@ -20,7 +28,7 @@ export class Locize implements Provider {
 
   async getKeys(locales: string[]) {
     showInfo('Start fetching messages from Locize');
-    const headers = { 'content-type': 'application/json' };
+    const headers = Locize.getHeaders();
     return asyncForEach(locales, async (locale: string) => {
       try {
         this.locizeKeys[locale] = await request<LocizeKeys>({
@@ -47,7 +55,7 @@ export class Locize implements Provider {
   }
 
   async uploadMessages(messages: Message[], locale = this.defaultLocale) {
-    const headers = { Authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' };
+    const headers = Locize.getHeaders(this.apiKey);
     const body = messages.reduce(
       (acc, { id, message, defaultMessage, description }) => {
         acc[id] = {
