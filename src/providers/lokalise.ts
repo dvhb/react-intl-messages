@@ -56,7 +56,7 @@ type LocalizeResponse = {
 export class Lokalise implements Provider {
   lokaliseKeys: LokaliseKey[] = [];
   newMessages: string[] = [];
-  constructor(private projectId?: string, private token?: string) {}
+  constructor(private defaultLocale?: string, private projectId?: string, private token?: string) {}
 
   async getKeys() {
     const headers = { 'x-api-token': this.token, 'content-type': 'application/json' };
@@ -79,7 +79,7 @@ export class Lokalise implements Provider {
     if (lokaliseString) {
       return lokaliseString.translation;
     }
-    if (locale === 'en') {
+    if (locale === this.defaultLocale) {
       this.newMessages.push(id);
     }
     return '';
@@ -92,7 +92,7 @@ export class Lokalise implements Provider {
         key_name: message.id,
         description: message ? message.description : '',
         platforms: ['ios', 'android', 'web', 'other'],
-        translations: [{ language_iso: 'en', translation: message ? message.defaultMessage : '' }],
+        translations: [{ language_iso: this.defaultLocale, translation: message ? message.defaultMessage : '' }],
       })),
     };
     try {

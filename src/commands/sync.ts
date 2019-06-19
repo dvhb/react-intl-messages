@@ -62,11 +62,13 @@ export default class Extract extends Base {
     const {
       flags: { langs, provider, projectId, token, version, namespace },
     } = this.parse(Extract);
+    const locales = langs.split(',');
+    const defaultLocale = locales[0];
 
     const getProvider = () => {
       const providers: { [key: string]: any } = {
-        lokalise: () => new Lokalise(projectId, token),
-        locize: () => new Locize(projectId, token, version, namespace),
+        lokalise: () => new Lokalise(defaultLocale, projectId, token),
+        locize: () => new Locize(defaultLocale, projectId, token, version, namespace),
       };
       return providers[provider]();
     };
@@ -77,7 +79,6 @@ export default class Extract extends Base {
       return;
     }
 
-    const locales = langs.split(',');
     locales.forEach(locale => {
       this.messages[locale] = {};
     });
@@ -92,7 +93,7 @@ export default class Extract extends Base {
           this.provider!.uploadMessages(newMessages.map(id => this.messages[locale][id]).filter(Boolean), locale),
         );
       } else {
-        await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), 'en');
+        await this.provider.uploadMessages(newMessages.map(id => this.messages[locales[0]][id]), defaultLocale);
       }
     }
   }

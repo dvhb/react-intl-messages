@@ -11,6 +11,7 @@ export class Locize implements Provider {
   locizeKeys: { [locale: string]: LocizeKeys } = {};
   newMessages: string[] = [];
   constructor(
+    private defaultLocale?: string,
     private projectId?: string,
     private apiKey?: string,
     private version?: string,
@@ -37,7 +38,7 @@ export class Locize implements Provider {
     if (key) {
       return this.locizeKeys[locale][key];
     }
-    if (locale === 'en') {
+    if (locale === this.defaultLocale) {
       this.newMessages.push(id);
     }
     return '';
@@ -48,7 +49,7 @@ export class Locize implements Provider {
     const body = messages.reduce(
       (acc, { id, message, defaultMessage, description }) => {
         acc[id] = {
-          value: locale === 'en' ? message || defaultMessage : message || '',
+          value: locale === this.defaultLocale ? message || defaultMessage : message || '',
           context: { text: description || '' },
         };
         return acc;
@@ -59,9 +60,9 @@ export class Locize implements Provider {
       const response = await request<string>({
         headers,
         body,
-        url: `${BASE_URL}/${locale === 'en' ? 'missing' : 'update'}/${this.projectId}/${this.version}/${locale}/${
-          this.namespace
-        }`,
+        url: `${BASE_URL}/${locale === this.defaultLocale ? 'missing' : 'update'}/${this.projectId}/${
+          this.version
+        }/${locale}/${this.namespace}`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${JSON.stringify(response, null, 2)}`);
