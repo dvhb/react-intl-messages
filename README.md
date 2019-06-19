@@ -55,6 +55,7 @@ OPTIONS
   --projectId=projectId          Provider`s project id
   --provider=lokalise|locize     (required) Translation service provider
   --token=token                  Provider`s token
+  --uploadTranslations           Upload existing translations to provider. Useful for provider migration.
   --version=version              Translations version, for example "production". Required for Locize
 ```
 
@@ -114,6 +115,7 @@ OPTIONS
   --projectId=projectId          Provider`s project id
   --provider=lokalise|locize     (required) Translation service provider
   --token=token                  Provider`s token
+  --uploadTranslations           Upload existing translations to provider. Useful for provider migration.
   --version=version              Translations version, for example "production". Required for Locize
 
 EXAMPLE
