@@ -53,6 +53,8 @@ type LocalizeResponse = {
   keys: LokaliseKey[];
 };
 
+const BASE_URL = 'https://api.lokalise.co/api2';
+
 export class Lokalise implements Provider {
   lokaliseKeys: LokaliseKey[] = [];
   newMessages: string[] = [];
@@ -66,13 +68,21 @@ export class Lokalise implements Provider {
     };
   }
 
+  private formatMessages(messages: Message[]) {
+    return messages.map(message => ({
+      key_name: message.id,
+      description: message ? message.description : '',
+      platforms: ['ios', 'android', 'web', 'other'],
+      translations: [{ language_iso: this.defaultLocale, translation: message ? message.defaultMessage : '' }],
+    }));
+  }
+
   async getKeys() {
     showInfo('Start fetching messages from Lokalise');
-    const headers = this.getHeaders();
     try {
       const response = await request<LocalizeResponse>({
-        headers,
-        url: `https://api.lokalise.co/api2/projects/${this.projectId}/keys`,
+        headers: this.getHeaders(),
+        url: `${BASE_URL}/projects/${this.projectId}/keys`,
         method: 'GET',
         qs: { include_translations: '1', limit: 5000 },
       });
@@ -96,20 +106,11 @@ export class Lokalise implements Provider {
   }
 
   async uploadMessages(messages: Message[]) {
-    const headers = this.getHeaders();
-    const body = {
-      keys: messages.map(message => ({
-        key_name: message.id,
-        description: message ? message.description : '',
-        platforms: ['ios', 'android', 'web', 'other'],
-        translations: [{ language_iso: this.defaultLocale, translation: message ? message.defaultMessage : '' }],
-      })),
-    };
     try {
       const response = await request<any>({
-        headers,
-        body,
-        url: `https://api.lokalise.co/api2/projects/${this.projectId}/keys`,
+        headers: this.getHeaders(),
+        body: { keys: this.formatMessages(messages) },
+        url: `${BASE_URL}/projects/${this.projectId}/keys`,
         method: 'POST',
       });
       showInfo(`Response from lokalise: ${response}`);

@@ -19,12 +19,25 @@ export class Locize implements Provider {
   }
 
   constructor(
-    private defaultLocale?: string,
+    private defaultLocale: string,
     private projectId?: string,
     private apiKey?: string,
     private version?: string,
     private namespace?: string,
   ) {}
+
+  private formatMessages(messages: Message[], isDefaultLocale: boolean) {
+    return messages.reduce(
+      (acc, { id, message, defaultMessage, description }) => {
+        acc[id] = {
+          value: isDefaultLocale ? message || defaultMessage : message || '',
+          context: { text: description || '' },
+        };
+        return acc;
+      },
+      {} as LocizeUploadKeys,
+    );
+  }
 
   async getKeys(locales: string[]) {
     showInfo('Start fetching messages from Locize');
@@ -55,24 +68,13 @@ export class Locize implements Provider {
   }
 
   async uploadMessages(messages: Message[], locale = this.defaultLocale) {
-    const headers = Locize.getHeaders(this.apiKey);
-    const body = messages.reduce(
-      (acc, { id, message, defaultMessage, description }) => {
-        acc[id] = {
-          value: locale === this.defaultLocale ? message || defaultMessage : message || '',
-          context: { text: description || '' },
-        };
-        return acc;
-      },
-      {} as LocizeUploadKeys,
-    );
+    const isDefaultLocale = locale === this.defaultLocale;
+    const uploadMethod = isDefaultLocale ? 'missing' : 'update';
     try {
       const response = await request<string>({
-        headers,
-        body,
-        url: `${BASE_URL}/${locale === this.defaultLocale ? 'missing' : 'update'}/${this.projectId}/${
-          this.version
-        }/${locale}/${this.namespace}`,
+        headers: Locize.getHeaders(this.apiKey),
+        body: this.formatMessages(messages, isDefaultLocale),
+        url: `${BASE_URL}/${uploadMethod}/${this.projectId}/${this.version}/${locale}/${this.namespace}`,
         method: 'POST',
       });
       showInfo(`Response from locize: ${JSON.stringify(response, null, 2)}`);
