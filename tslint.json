@@ -1,3 +1,6 @@
 {
-  "extends": "@dvhb/tslint-config"
+  "extends": "@dvhb/tslint-config",
+  "rules": {
+    "no-default-export": false
+  }
 }

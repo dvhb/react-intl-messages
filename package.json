@@ -31,7 +31,8 @@
     "semantic-release": "semantic-release",
     "test": "jest",
     "posttest": "tslint -p . -t stylish",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "lint": "tslint -p tsconfig.json -c tslint.json -t verbose"
   },
   "husky": {
     "hooks": {
@@ -67,7 +68,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
-    "@dvhb/tslint-config": "^1.0.6",
+    "@dvhb/tslint-config": "^1.0.9",
     "@oclif/dev-cli": "^1.22.0",
     "@oclif/test": "^1.2.4",
     "@types/babel__core": "^7.1.2",
