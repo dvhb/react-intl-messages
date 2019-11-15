@@ -5,3 +5,10 @@ export type Message = {
   description?: string;
   files?: string[];
 };
+
+export type Config = {
+  messagesDir: string;
+  langs: string;
+  pattern: string;
+  ignore: string;
+};

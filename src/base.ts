@@ -1,11 +1,13 @@
 import { Command, flags } from '@oclif/command';
-import * as cosmiconfig from 'cosmiconfig';
+import { cosmiconfigSync } from 'cosmiconfig';
 import { config } from 'dotenv';
+
+import { Config } from './types';
 
 config();
 
 export abstract class Base extends Command {
-  static cosmiconfig: cosmiconfig.Config | null;
+  static cosmiconfig: Config | null;
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -21,7 +23,7 @@ export abstract class Base extends Command {
     langs: flags.string({
       char: 'l',
       description: 'Comma separated languages',
-      default: () => (Base.cosmiconfig ? Base.cosmiconfig.langs : null),
+      default: () => (Base.cosmiconfig ? Base.cosmiconfig.langs : undefined),
       required: true,
     }),
   };
@@ -54,8 +56,8 @@ export abstract class Base extends Command {
   };
 
   async init() {
-    const explorer = cosmiconfig(this.config.bin);
-    const result = explorer.searchSync();
+    const explorer = cosmiconfigSync(this.config.bin);
+    const result = explorer.search();
     Base.cosmiconfig = result ? result.config : null;
   }
 }
