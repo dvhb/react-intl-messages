@@ -64,7 +64,7 @@ export class Lokalise implements Provider {
   private getHeaders() {
     return {
       'content-type': 'application/json',
-      'x-api-token': `Bearer ${this.token}`,
+      'X-Api-Token': this.token,
     };
   }
 
