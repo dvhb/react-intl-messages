@@ -1,5 +1,4 @@
-react-intl-messages
-==================
+# react-intl-messages
 
 Library for parsing source files and extract react-intl messages. Extracted messages saves to json files. Underhood it uses babe-plugin-react-intl
 
@@ -9,18 +8,25 @@ Library for parsing source files and extract react-intl messages. Extracted mess
 [![License](https://img.shields.io/npm/l/@dvhb/react-intl-messages.svg)](https://github.com/sairus2k/@dvhb/react-intl-messages/blob/master/package.json)
 
 <!-- toc -->
-* [Features](#features)
-* [Usage](#usage)
-* [Commands](#commands)
-* [Config](#config)
-<!-- tocstop -->
+
+- [Features](#features)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Config](#config)
+- [Integration](#integration)
+  <!-- tocstop -->
+
 # Features
-* synchronize translations with translation service ([lokalise.co](https://lokalise.co/) for now)
-* custom babel config, appropriate for projects on react-native and typescript
-* prettify extracted json files
-* store parameters in config
+
+- synchronize translations with translation service ([lokalise.co](https://lokalise.co/) and [Locize](https://locize.com/) for now)
+- custom babel config, appropriate for projects on react-native and typescript
+- prettify extracted json files
+- store parameters in config
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @dvhb/react-intl-messages
 $ messages COMMAND
@@ -32,13 +38,17 @@ USAGE
   $ messages COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`messages clean`](#messages-clean)
-* [`messages extract`](#messages-extract)
-* [`messages help [COMMAND]`](#messages-help-command)
-* [`messages sync`](#messages-sync)
+
+- [`messages clean`](#messages-clean)
+- [`messages extract`](#messages-extract)
+- [`messages help [COMMAND]`](#messages-help-command)
+- [`messages sync`](#messages-sync)
 
 ## `messages clean`
 
@@ -123,11 +133,87 @@ EXAMPLE
 ```
 
 _See code: [src/commands/sync.ts](https://github.com/dvhb/react-intl-messages/blob/v2.2.2/src/commands/sync.ts)_
+
 <!-- commandsstop -->
 
 # Config
-* `messages` property in a package.json file.
-* `.messages` file with JSON or YAML syntax.
-* `.messages.json` file.
-* `.messages.yaml` or `.messages.yml` file.
-* `.messages.js` or `messages.config.js` JS file exporting the object.
+
+- `messages` property in a package.json file.
+- `.messages` file with JSON or YAML syntax.
+- `.messages.json` file.
+- `.messages.yaml` or `.messages.yml` file.
+- `.messages.js` or `messages.config.js` JS file exporting the object.
+
+`package.json` example:
+
+```json
+{
+  "messages": {
+    "langs": "en,fr,de,ru",
+    "pattern": "src/**/*.js",
+    "messagesDir": "src/messages"
+  }
+}
+```
+
+# Integration
+
+A brief instruction how to integrate `react-intl` in your project. For more details please check the [react-intl documentation](https://github.com/formatjs/react-intl/blob/master/docs/README.md)
+
+1. Install [react-intl](https://www.npmjs.com/package/react-intl) and [@dvhb/react-intl-messages](https://www.npmjs.com/package/@dvhb/react-intl-messages)
+   ```shell script
+   npm install --save-dev react-intl @dvhb/react-intl-messages
+   ```
+1. Add config for `@dvhb/react-intl-messages` as described in [Config](#config) section.
+
+   After that you can generate messages files like that:
+
+   ```shell script
+   npx messages extract
+   ```
+
+1. Add polyfills for `Intl.NumberFormat` and `Intl.DateTimeFormat` if necessary (for IE11 and react-native) like described in the [instruction](https://github.com/formatjs/react-intl/blob/master/docs/Getting-Started.md#runtime-requirements).
+1. Wrap the app with [IntlProvider](https://github.com/formatjs/react-intl/blob/master/docs/Components.md#intlprovider).
+   Import translations from extracted files. Then reduce translations and pass them to the provider:
+
+   ```jsx harmony
+   import messagesEn from '../messages/en.json'
+
+   const reduceMessages = messages => Object.assign({}, ...messages.map(msg => ({ [msg.id]: msg })));
+
+   const locale = 'en';
+
+   const messages = {
+     en: reduceMessages(messagesEn),
+   }
+
+   <IntlProvider messages={messages[locale]} locale={locale}>
+     <App />
+   </IntlProvider>;
+   ```
+
+1. After that you can use react-intl components in your project. Like that:
+
+   ```jsx harmony
+   <FormattedMessage
+     id="app.greeting"
+     description="Greeting to welcome the user to the app"
+     defaultMessage="Hello, <b>Eric</b> {icon}"
+     values={{
+       b: msg => <b>{msg}</b>,
+       icon: <svg />,
+     }}
+   />
+   ```
+
+1. Now if you extract messages again, in `_default.json` file should appear new item.
+   ```json
+   [
+     {
+       "id": "app.greeting",
+       "defaultMessage": "Greeting to welcome the user to the app",
+       "message": "",
+       "files": ["src/HelloWorld.js"]
+     }
+   ]
+   ```
