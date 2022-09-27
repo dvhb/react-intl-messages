@@ -51,6 +51,7 @@ export type LokaliseKey = {
 
 type LocalizeResponse = {
   keys: LokaliseKey[];
+  headers: Record<string, string>;
 };
 
 const BASE_URL = 'https://api.lokalise.co/api2';
@@ -87,7 +88,29 @@ export class Lokalise implements Provider {
         qs: { include_translations: '1', limit: 5000 },
       });
       if (!response || !response.keys) throw Error('Wrong answer from lokalise');
-      this.lokaliseKeys = response.keys;
+      this.lokaliseKeys = [...response.keys];
+
+      const arrOfRequests: any[] = [];
+      const currentPage = 2;
+
+      const arr = [...Array(Number(response.headers['x-pagination-page-count']) - 1)];
+
+      arr.forEach((i, index) => {
+        arrOfRequests.push(
+          request({
+            headers: this.getHeaders(),
+            url: `${BASE_URL}/projects/${this.projectId}/keys`,
+            method: 'GET',
+            qs: { include_translations: '1', limit: 500, page: currentPage + index },
+          }),
+        );
+      });
+
+      const res = await Promise.all(arrOfRequests);
+
+      res.forEach(i => {
+        this.lokaliseKeys = [...this.lokaliseKeys, ...i.keys];
+      });
       showInfo('Finish fetching messages from Lokalise');
     } catch (e) {
       showError(`Error while fetching strings from lokalise\n${e}`);

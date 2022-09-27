@@ -53,7 +53,7 @@ export const request = <T>({ url, body, qs, headers = {}, ...rest }: Options) =>
       response.on('data', chunk => {
         data += chunk;
       });
-      response.on('end', () => resolve(JSON.parse(data)));
+      response.on('end', () => resolve({ ...JSON.parse(data), headers: response.headers }));
     });
 
     if (body) {
